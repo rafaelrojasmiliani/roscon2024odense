@@ -38,17 +38,25 @@
 		\item \Verb|FollowJointGSpline.action|
 	\end{itemize}
 
-	\begin{plantuml}
-		@startuml
-		Alice -> Bob: test
-		@enduml
-	\end{plantuml}
-
+	\begin{tikzpicture}
+		\umlbasiccomponent[x=0, y=-3]{ROSAPP}
+		\umlbasiccomponent[x=4]{ActionWrapper}
+		\umlbasiccomponent[x=7,y=-3]{ROSControl}
+		\umlVHassemblyconnector[interface=AB3 ,first arm, anchor2=-160] {ROSAPP}{ActionWrapper}
+		\umlVHassemblyconnector[interface=AB3 ,first arm, anchor2=0] {ROSControl}{ActionWrapper}
+	\end{tikzpicture}
 
 \end{frame}
 
 \begin{frame}[t]
 	\frametitle{OpStop Integration}
+	\begin{tikzpicture}
+		\umlbasiccomponent[x=0, y=-3]{ROSAPP}
+		\umlbasiccomponent[x=4]{ActionWrapper}
+		\umlbasiccomponent[x=7,y=-3]{ROSControl}
+		\umlVHassemblyconnector[interface=AB3 ,first arm, anchor2=-160] {ROSAPP}{ActionWrapper}
+		\umlVHassemblyconnector[interface=AB3 ,first arm, anchor2=0] {ROSControl}{ActionWrapper}
+	\end{tikzpicture}
 
 \end{frame}
 
