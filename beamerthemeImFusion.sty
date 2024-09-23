@@ -1,0 +1,92 @@
+\ProvidesPackage{ImFusionTheme}
+\usepackage{xcolor}
+\usepackage[default]{lato} % Load Lato font as a substitute for Raleway
+\usepackage{tikz}
+\definecolor{darkgrey}{HTML}{2F2F2F} % Define custom color for background
+\definecolor{imfusionBlue}{HTML}{00b0db}
+\mode<presentation>
+{
+	% Specify which outer and inner themes to use
+	\useoutertheme{default}
+	\useinnertheme{rounded}
+	% Include your color and font themes here
+	\usecolortheme{dolphin}
+	\usefonttheme{serif}
+}
+% Use Helvetica as a substitute for Roboto Light
+\renewcommand{\rmdefault}{phv} % Use Helvetica for content
+
+% Set Lato for titles (slide frametitle)
+\setbeamerfont{frametitle}{family=\sffamily, size=\Large, series=\bfseries}
+\setbeamercolor{frametitle}{fg=imfusionBlue} % Set title color to blue
+% \setbeamertemplate{frametitle}{
+% 	\vglue 5mm
+% 	% Display section and subsection names
+% 	\ifx\insertsubsectionhead\empty
+% 		\vbox{
+% 			\raggedright
+% 			\usebeamerfont{section in head/foot}\insertsectionhead\par
+% 			\vskip1pt % Adjust space between section and frametitle
+% 			\usebeamercolor[fg]{frametitle}%
+% 			\usebeamerfont{frametitle}\insertframetitle\par
+% 		}
+% 	\else
+% 		\vbox{
+% 			\raggedright
+% 			\usebeamerfont{section in head/foot}\insertsectionhead\par
+% 			\usebeamerfont{subsection in head/foot}\insertsubsectionhead\par
+% 			\vskip1pt % Adjust space between subsection and frametitle
+% 			\usebeamercolor[fg]{frametitle}%
+% 			\usebeamerfont{frametitle}\insertframetitle\par
+% 		}
+% 	\fi
+% }
+
+% Set Helvetica (Roboto Light substitute) for normal text
+\setbeamerfont{normal text}{family=\rmfamily, size=\normalsize}
+
+\setbeamercolor{title page}{bg=darkgrey} % Alternatively use RGB
+
+\setbeamertemplate{title page}
+{
+	\begin{beamercolorbox}[wd=\paperwidth, ht=\paperheight, sep=0pt]{title page}
+		% Add the image to the top-left corner
+		\includegraphics[width=7cm]{./images/logo.png} % Your image
+		\hfill
+		\vskip2cm % Adjust vertical space from the top to the title
+		\centering
+		\usebeamerfont{title}\inserttitle\par
+		\vskip0.5em
+		\usebeamerfont{subtitle}\insertsubtitle\par
+		\vskip1em
+		\usebeamerfont{author}\insertauthor\par
+		\usebeamerfont{institute}\insertinstitute\par
+		\vskip1em
+		\usebeamerfont{date}\insertdate\par
+	\end{beamercolorbox}
+}
+
+%%% FOODline
+\setbeamerfont{page number in foot}{size=\footnotesize, series=\bfseries} % Customize as needed
+
+\setbeamercolor{footline}{fg=black, bg=darkgrey}
+
+\setbeamertemplate{footline}{
+	\leavevmode\hbox{%
+		\begin{beamercolorbox}[wd=\paperwidth, ht=.8cm, dp=1ex, left, leftskip=0.2cm, sep=0.5mm]{footline}%
+			\includegraphics[width=4cm]{./images/logo.png} % Your image
+		\end{beamercolorbox}%
+	}}
+
+
+% Load TikZ package for drawing
+
+% Define a custom bullet shape (blue circle) using TikZ
+\newcommand{\custombluebullet}{%
+	\tikz \fill[imfusionBlue] (0,0) circle (0.07cm); % A filled blue circle with 0.15cm radius
+}
+
+% Customize the appearance of itemizations
+\setbeamertemplate{itemize item}{\custombluebullet} % Set the custom blue bullet for itemize
+\setbeamertemplate{itemize subitem}{\custombluebullet} % Apply the same for subitems (optional)
+

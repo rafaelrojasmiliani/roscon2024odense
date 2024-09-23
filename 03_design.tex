@@ -1,0 +1,103 @@
+
+\begin{frame}[t]
+
+	\begin{equation*}
+		\min \int_{t_0}^{t_f} \alpha_1 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 \left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \alpha_1 \left\|\diffk{\qv}{t}{2} \right\|^2 \d t
+	\end{equation*}
+
+	\begin{equation*}
+		-\alpha_1 \diffk{\qv}{t}{2}+ \alpha_2 \diffk{\qv}{t}{4}- \cdots +  {(-1)}^k \alpha_k \diffk{\qv}{t}{2k}= 0 \ \ \text{a.e.}
+	\end{equation*}
+
+	\begin{equation*}
+		\qv(t) = x_1 \basis_1
+	\end{equation*}
+\end{frame}
+
+\begin{frame}[t]
+
+	\begin{itemize}
+		\item Posibility of defining Analytic operations (Analytical consistency)
+		      \begin{equation*}
+			      -\alpha_1 \diffk{}{t}{2} \diff{\qv}{t}+ \alpha_2 \diffk{}{t}{4}\diff{\qv}{t}- \cdots +  {(-1)}^k \alpha_k \diffk{}{t}{2k}\diff{\qv}{t}= 0 \ \ \text{a.e.}
+		      \end{equation*}
+		\item Posibility to define algebraic operations
+		      \begin{eqnarray*}
+			      +:\text{GSpline}\longrightarrow \text{GSpline}\\
+			      \cdot:\mathbb{R} \times \text{GSpline}\longrightarrow \text{GSpline}
+		      \end{eqnarray*}
+		\item Linear Scaling
+		      \begin{eqnarray*}
+			      \left[t \rightarrow \sigma t \right]:\text{GSpline}\longrightarrow \text{GSpline}
+		      \end{eqnarray*}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+
+	\begin{lstlisting}
+    class GSpline {
+    private:
+        Eigen::VectorXd time_interval_lengths_;
+        Eigen::VectorXd coefficients_;
+        double initial_time_;
+        std::unique_ptr<Basis> basis_;
+    public:
+        GSpline& operator=(const GSpline&) const;
+        GSpline linear_scaling_new_execution_time(double _new_exec_time) const;
+        GSpline operator+(const GSpline& that);
+        GSpline operator*(double num);
+        GSpline derivative(std::size_t deg);
+        bool operator==(const GSpline& _that) const;
+        bool operator!=(const GSpline& _that) const;
+    };
+    \end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\begin{lstlisting}
+    class Basis {
+        protected:
+  size_t dim_;
+  Eigen::VectorXd parameters_float_;
+  Eigen::VectorXi parameters_int_;
+    virtual void eval_on_window(
+      double _s, double _tau,
+      Eigen::Ref<Eigen::VectorXd, 0, Eigen::InnerStride<>> _buff) const = 0;
+  virtual void eval_derivative_on_window(
+      double _s, double _tau, unsigned int _deg,
+      Eigen::Ref<Eigen::VectorXd, 0, Eigen::InnerStride<>> _buff) const = 0;
+  virtual void eval_derivative_wrt_tau_on_window(
+      double _s, double _tau, unsigned int _deg,
+      Eigen::Ref<Eigen::VectorXd, 0, Eigen::InnerStride<>> _buff) const = 0;
+
+  virtual std::unique_ptr<Basis> clone() const = 0;
+  };
+    \end{lstlisting}
+\end{frame}
+\begin{frame}[fragile]
+	\begin{itemize}
+		\item Polynomial Basis solution of
+		      \begin{eqnarray}
+			      \min \int_{t_0}^{t_f} \left\|\diffk{\qv}{t}{k}\right\|^2 \d t
+		      \end{eqnarray}
+		      \begin{itemize}
+			      \item  \Verb|basis::BasisLegendre|
+			      \item  \Verb|basis::BasisLagrange|
+		      \end{itemize}
+		\item Non Polynomial basis
+		      \begin{eqnarray}
+			      \min \int_{t_0}^{t_f} \alpha \left\|\diffk{\qv}{t}{}\right\|^2  + (\alpha - 1 )\left\|\diffk{\qv}{t}{3}\right\|^2 \d t
+		      \end{eqnarray}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{General operations}
+	We also desire to work with trajectories that are not gsplines
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{OpStop}
+\end{frame}

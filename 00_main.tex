@@ -1,0 +1,97 @@
+% Creating a simple Title Page in Beamer
+\documentclass{beamer}
+\usepackage{tikz}
+\usepackage{tikz-uml}
+\usepackage{plantuml}
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}      % use arrow with 90°
+\usetikzlibrary{arrows.meta}      % use arrow with 90°
+\usetikzlibrary{calc}        % compute midpoint $(A)!0.5!(b)$
+\usetikzlibrary{fit}        % fit several nodes
+\usetikzlibrary{backgrounds}        % fit several nodes
+\usetikzlibrary{positioning}  % of left = of {1cm} NODE
+\usetikzlibrary{automata} % draw finite automata
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{decorations.pathreplacing} %%curly braces
+\usetikzlibrary{decorations.pathmorphing} %% snake, saw
+\usetikzlibrary{decorations} %%curly braces
+\usetikzlibrary{quotes} %%curly braces
+\usetikzlibrary{intersections} % intersections
+\usetikzlibrary{patterns}      % fill nodes with pattersn
+\usetikzlibrary{tikzmark}      % fill nodes with pattersn
+
+\usepackage{hyperref}
+\usepackage{fancyvrb}
+\usepackage{graphicx} % Required to include images
+\usepackage{inconsolata}
+\usepackage{listings}
+\usepackage{balance}
+\usepackage{booktabs}
+\usepackage[cal=boondox]{mathalfa}
+\usepackage[english]{babel}
+\usepackage{amssymb}% math symbols as mathbb, \mathsf{d}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{siunitx} %units
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{soul}
+\usepackage{tabularx}
+\usepackage{siunitx}
+\usepackage{array}
+\normalfont%
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz-cd} % commutative diagrams with tikz
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\SetKw{KwTo}{To}
+\SetKwRepeat{Do}{do}{while}
+\usepackage{caption}
+\usepackage{subcaption}
+\input{./definitions.tex}
+
+
+\lstset{language=c++,
+	basicstyle=\fontsize{4pt}{0pt}\selectfont\fontfamily{zi4}\selectfont,
+	keywordstyle=\color{blue}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	commentstyle=\color{green}\ttfamily,
+	morecomment=[l][\color{magenta}]{\#}
+}
+\definecolor{maroon}{rgb}{0.5,0,0}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\lstdefinelanguage{XML}
+{
+	basicstyle=\fontsize{4pt}{0pt}\selectfont\fontfamily{zi4}\selectfont,
+	morestring=[s]{"}{"},
+	morecomment=[s]{?}{?},
+	morecomment=[s]{!--}{--},
+	commentstyle=\color{darkgreen},
+	moredelim=[s][\color{black}]{>}{<},
+	moredelim=[s][\color{red}]{\ }{=},
+	stringstyle=\color{blue},
+	identifierstyle=\color{maroon}
+}
+
+
+% Theme choice:
+\usetheme{ImFusion}
+
+% Title page details: 
+\title{GSplines: An analytically and algebraically consistency library for motion planning and optimization}
+\author{Rafael A. Rojas}
+\date{\today}
+
+
+\begin{document}
+
+\frame{\titlepage}
+\include{./01_motivation.tex}
+\include{./02_goals.tex}
+\include{./03_design.tex}
+\include{./04_ros.tex}
+\end{document}

@@ -1,0 +1,63 @@
+\begin{frame}[fragile]
+	\frametitle{Integration with ROS types}
+	\begin{lstlisting}
+        #  This message represents a generalized spline
+        # Name of the basis
+        string name
+        # Dimension of the vector space defined by the basis
+        int32 dim
+        # Parameters
+        float64[] parameters
+	\end{lstlisting}
+	\begin{lstlisting}
+        #  This message represents a generalized spline
+
+        float64 domain_left_boundary
+        float64 domain_right_boundary
+        int32 codom_dim
+        int32 number_of_intervals
+        gsplines_msgs/Basis basis
+        float64[] coefficients
+        float64[] interval_lengths
+	\end{lstlisting}
+	\begin{lstlisting}
+        Header header
+        string[] name
+        gsplines_msgs/GSpline gspline
+	\end{lstlisting}
+	\begin{itemize}
+		\item \Verb|trajectory_msgs::JointTrajectory|
+		\item \Verb|control_msgs::FollowJointTrajectoryGoal|
+
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Integration with ROS Control}
+	\begin{itemize}
+		\item \Verb|FollowJointGSpline.action|
+	\end{itemize}
+
+	\begin{plantuml}
+		@startuml
+		Alice -> Bob: test
+		@enduml
+	\end{plantuml}
+
+
+\end{frame}
+
+\begin{frame}[t]
+	\frametitle{OpStop Integration}
+
+\end{frame}
+
+\begin{frame}[t]
+	\frametitle{Integration with Moveit}
+
+\end{frame}
+
+\begin{frame}[t]
+	\frametitle{Integration with Moveit}
+
+\end{frame}
