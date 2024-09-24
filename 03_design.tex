@@ -1,81 +1,118 @@
 
+\section{Design}
 \begin{frame}[t]
+	\frametitle{Mathematical Foundations}
+
+	We consider the problem of the minimization of a \emph{convex} combination of norms of the derivatives
 
 	\begin{equation*}
-		\min \int_{t_0}^{t_f} \alpha_1 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 \left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \alpha_1 \left\|\diffk{\qv}{t}{2} \right\|^2 \d t
+		\min \int_{t_0}^{t_f} \alpha_1 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 \left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \alpha_1 \left\|\diffk{\qv}{t}{k} \right\|^2 \d t
 	\end{equation*}
+
+	And the corresponding Euler-Lagrange equations
 
 	\begin{equation*}
 		-\alpha_1 \diffk{\qv}{t}{2}+ \alpha_2 \diffk{\qv}{t}{4}- \cdots +  {(-1)}^k \alpha_k \diffk{\qv}{t}{2k}= 0 \ \ \text{a.e.}
 	\end{equation*}
 
+	At each time-interval we have
 	\begin{equation*}
-		\qv(t) = x_1 \basis_1
+		\qv(t) = \xv_1 \basis_1
 	\end{equation*}
 \end{frame}
 
 \begin{frame}[t]
+	\frametitle{Mathematical Foundations: Features}
 
-	\begin{itemize}
-		\item Posibility of defining Analytic operations (Analytical consistency)
-		      \begin{equation*}
-			      -\alpha_1 \diffk{}{t}{2} \diff{\qv}{t}+ \alpha_2 \diffk{}{t}{4}\diff{\qv}{t}- \cdots +  {(-1)}^k \alpha_k \diffk{}{t}{2k}\diff{\qv}{t}= 0 \ \ \text{a.e.}
-		      \end{equation*}
-		\item Posibility to define algebraic operations
-		      \begin{eqnarray*}
-			      +:\text{GSpline}\longrightarrow \text{GSpline}\\
-			      \cdot:\mathbb{R} \times \text{GSpline}\longrightarrow \text{GSpline}
-		      \end{eqnarray*}
-		\item Linear Scaling
-		      \begin{eqnarray*}
-			      \left[t \rightarrow \sigma t \right]:\text{GSpline}\longrightarrow \text{GSpline}
-		      \end{eqnarray*}
-	\end{itemize}
+	We can prove that the solution of these ODEs respect the desired properites
+		{\fontsize{10}{5}
+			\begin{itemize}
+				\item Analytical consistency:
+				      \begin{equation*}
+					      -\alpha_1 \diffk{}{t}{2} \left[\diff{\qv}{t}\right] +  \cdots +  {(-1)}^k \alpha_k \diffk{}{t}{2k} \left[\diff{\qv}{t}\right] = 0 \ \ \text{a.e.}
+				      \end{equation*}
+				\item Algebraic consistency I:\@ Linear Operations
+				      \begin{eqnarray*}
+					      -\alpha_1 \diffk{}{t}{2} \left[\qv_1 + \qv_2\right]  + \cdots +  {(-1)}^k \alpha_k \diffk{}{t}{2k} \left[\qv_1 + \qv_2\right] = 0 \ \ \text{a.e.}
+				      \end{eqnarray*}
+				\item Algebraic consistance II:\@ Linear Scaling
+				      \only<1>{
+					      \begin{eqnarray*}
+						      -\alpha_1 \diffk{}{t}{2} \left[\qv(\sigma t)\right]  + \cdots +  {(-1)}^k \alpha_k \diffk{}{t}{2k} \left[\qv(\sigma t)\right] = 0 \ \ \text{a.e.}
+					      \end{eqnarray*}
+				      }
+				      \only<2>{
+					      \begin{eqnarray*}
+						      -\warntext{\mathbf{\alpha}_1'} \diffk{}{t}{2} \left[\qv(\sigma t)\right]  + \cdots +  {(-1)}^k \alpha_k \diffk{}{t}{2k} \left[\qv(\sigma t)\right] = 0 \ \ \text{a.e.}
+					      \end{eqnarray*}
+				      }
+			\end{itemize}
+		}
+\end{frame}
+\begin{frame}[t]
+	\frametitle{Mathematical Foundations: Linear Time-scaling invariance}
+	If we desire a Time-scaling invariant cost function, we need to choose
+	\begin{equation*}
+		\min \int_{t_0}^{t_f} \frac{\alpha_1}{T^2} \left\|\diff{\qv}{t}\right\|^2 + \frac{\alpha_2}{T^4}\left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \frac{\alpha_k}{T^{2k}}\left\|\diffk{\qv}{t}{k} \right\|^2 \d t
+	\end{equation*}
 \end{frame}
 
 \begin{frame}[fragile]
+	\frametitle{Class Design: Overview}
 
-	\begin{lstlisting}
-    class GSpline {
-    private:
-        Eigen::VectorXd time_interval_lengths_;
-        Eigen::VectorXd coefficients_;
-        double initial_time_;
-        std::unique_ptr<Basis> basis_;
-    public:
-        GSpline& operator=(const GSpline&) const;
-        GSpline linear_scaling_new_execution_time(double _new_exec_time) const;
-        GSpline operator+(const GSpline& that);
-        GSpline operator*(double num);
-        GSpline derivative(std::size_t deg);
-        bool operator==(const GSpline& _that) const;
-        bool operator!=(const GSpline& _that) const;
-    };
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			\begin{lstlisting}[language=c++]
+class GSpline {
+private:
+    Eigen::VectorXd time_interval_lengths_;
+    Eigen::VectorXd coefficients_;
+    double initial_time_;
+    std::unique_ptr<Basis> basis_;
+public:
+    GSpline linear_scaling_new_execution_time(double _T) const;
+    GSpline operator+(const GSpline& that);
+    GSpline operator*(double num);
+    GSpline derivative(std::size_t deg);
+    bool operator()(double time) const;
+};
     \end{lstlisting}
-\end{frame}
-
-
-\begin{frame}[fragile]
-	\begin{lstlisting}
-    class Basis {
-        protected:
-  size_t dim_;
-  Eigen::VectorXd parameters_float_;
-  Eigen::VectorXi parameters_int_;
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			\begin{lstlisting}[language=C++]
+class Basis {
+protected:
+    Eigen::VectorXd parameters_float_;
+    Eigen::VectorXi parameters_int_;
+public:
     virtual void eval_on_window(
-      double _s, double _tau,
-      Eigen::Ref<Eigen::VectorXd, 0, Eigen::InnerStride<>> _buff) const = 0;
-  virtual void eval_derivative_on_window(
-      double _s, double _tau, unsigned int _deg,
-      Eigen::Ref<Eigen::VectorXd, 0, Eigen::InnerStride<>> _buff) const = 0;
-  virtual void eval_derivative_wrt_tau_on_window(
-      double _s, double _tau, unsigned int _deg,
-      Eigen::Ref<Eigen::VectorXd, 0, Eigen::InnerStride<>> _buff) const = 0;
+                    ..., Eigen::VectorXd&_buff) const = 0;
+    virtual void eval_derivative_on_window(
+                    ..., Eigen::VectorXd& _buff) const = 0;
+    virtual void eval_derivative_wrt_tau_on_window(
+                    ..., Eigen::VectorXd& _buff) const = 0;
 
-  virtual std::unique_ptr<Basis> clone() const = 0;
-  };
+    virtual std::unique_ptr<Basis> clone() const = 0;
+};
     \end{lstlisting}
+		\end{column}
+	\end{columns}
+	\begin{center}
+		\begin{tikzpicture}[scale=0.9]
+			\tikzumlset{font=\fontsize{5}{4}\selectfont}
+			\umlemptyclass{GSpline}
+			\umlemptyclass[x=7, y=0]{Basis}
+			\umlunicompo [angle1=-90, angle2=-140 ] {GSpline}{Basis}
+			\umlemptyclass[x=3, y=-2]{BasisLagrange}
+			\umlemptyclass[x=6, y=-2]{BasisLegendre}
+			\umlemptyclass[x=9, y=-2]{CustomBasis}
+			\umlVHVinherit[] {CustomBasis}{Basis}
+			\umlVHVinherit[] {BasisLagrange}{Basis}
+			\umlVHVinherit[] {BasisLegendre}{Basis}
+		\end{tikzpicture}
+	\end{center}
 \end{frame}
+
 \begin{frame}[fragile]
 	\begin{itemize}
 		\item Polynomial Basis solution of
@@ -90,12 +127,24 @@
 		      \begin{eqnarray}
 			      \min \int_{t_0}^{t_f} \alpha \left\|\diffk{\qv}{t}{}\right\|^2  + (\alpha - 1 )\left\|\diffk{\qv}{t}{3}\right\|^2 \d t
 		      \end{eqnarray}
+		      \begin{itemize}
+			      \item  \Verb|basis::Basis0101|
+		      \end{itemize}
 	\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]
 	\frametitle{General operations}
 	We also desire to work with trajectories that are not gsplines
+	\begin{tikzpicture}[scale=0.9]
+		\tikzumlset{font=\fontsize{5}{4}\selectfont}
+		\umlemptyclass[x=0, y=0]{FunctionBase}
+		\umlemptyclass[x=-3, y=-2]{CustomFunction}
+		\umlemptyclass[x=3, y=-2]{FunctionExpression}
+		\umlVHVinherit[] {FunctionExpression}{FunctionBase}
+		\umlVHVinherit[] {CustomFunction}{FunctionBase}
+		\umlHVHunicompo[anchor1=east,angle1=0, arm1=1cm, angle2=0,mult1=1, mult2=1..*] {FunctionExpression}{FunctionBase}
+	\end{tikzpicture}
 \end{frame}
 
 \begin{frame}[fragile]

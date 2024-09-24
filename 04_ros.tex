@@ -60,8 +60,19 @@
 
 \end{frame}
 
-\begin{frame}[t]
+\begin{frame}[fragile]
 	\frametitle{Integration with Moveit}
+	\begin{itemize}
+		\item Planner adapter \Verb|gsplines_moveit/MinimumSobolevSeminormAdapter|, can be used inside \Verb|ompl| pipeline
+		      \begin{lstlisting}
+gsplines_moveit/MinimumSobolevSeminormAdapter
+default_planner_request_adapters/FixWorkspaceBounds
+default_planner_request_adapters/FixStartStateBounds
+default_planner_request_adapters/FixStartStateCollision
+default_planner_request_adapters/FixStartStatePathConstraints
+	          \end{lstlisting}
+		\item  Controller Manager \Verb|gsplines_moveit/GSplinesControllerManager|
+	\end{itemize}
 
 \end{frame}
 
