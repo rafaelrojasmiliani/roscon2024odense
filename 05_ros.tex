@@ -38,26 +38,55 @@
 		\item \Verb|FollowJointGSpline.action|
 	\end{itemize}
 
-	\begin{tikzpicture}
-		\umlbasiccomponent[x=0, y=-3]{ROSAPP}
-		\umlbasiccomponent[x=4]{ActionWrapper}
-		\umlbasiccomponent[x=7,y=-3]{ROSControl}
-		\umlVHassemblyconnector[interface=AB3 ,first arm, anchor2=-160] {ROSAPP}{ActionWrapper}
-		\umlVHassemblyconnector[interface=AB3 ,first arm, anchor2=0] {ROSControl}{ActionWrapper}
-	\end{tikzpicture}
+	\begin{center}
+		\begin{tikzpicture}
+			\tikzumlset{font=\fontsize{5}{4}\selectfont}
+			\umlbasiccomponent[x=0, y=-3]{ROSAPP}
+			\umlbasiccomponent[x=4]{ActionWrapper}
+			\umlbasiccomponent[x=7,y=-3]{ROSControl}
+			\umlVHassemblyconnector[interface=FollowJointGSplineAction ,first arm, anchor2=-160] {ROSAPP}{ActionWrapper}
+			\umlVHassemblyconnector[interface=FollowJointTrajectoryAction ,first arm, anchor2=0] {ROSControl}{ActionWrapper}
+		\end{tikzpicture}
+	\end{center}
 
 \end{frame}
 
 \begin{frame}[t]
 	\frametitle{OpStop Integration}
-	\begin{tikzpicture}
-		\umlbasiccomponent[x=0, y=-3]{ROSAPP}
-		\umlbasiccomponent[x=4]{ActionWrapper}
-		\umlbasiccomponent[x=7,y=-3]{ROSControl}
-		\umlVHassemblyconnector[interface=AB3 ,first arm, anchor2=-160] {ROSAPP}{ActionWrapper}
-		\umlVHassemblyconnector[interface=AB3 ,first arm, anchor2=0] {ROSControl}{ActionWrapper}
-	\end{tikzpicture}
+	\begin{center}
+		\begin{tikzpicture}
+			\tikzumlset{font=\fontsize{5}{4}\selectfont}
+			\umlbasiccomponent[x=0, y=-3]{ROSAPP}
+			\umlbasiccomponent[x=4]{ActionWrapper}
+			\umlbasiccomponent[x=7,y=-3]{ROSControl}
+			\umlVHassemblyconnector[interface=FollowJointGSplineAction ,first arm, anchor2=-160] {ROSAPP}{ActionWrapper}
+			\umlVHassemblyconnector[interface=FollowJointTrajectoryAction ,first arm, anchor2=0] {ROSControl}{ActionWrapper}
+		\end{tikzpicture}
+	\end{center}
+\end{frame}
 
+\begin{frame}[t]
+	\frametitle{OpStop Integration}
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{umlseqdiag}
+				\tikzumlset{font=\fontsize{5}{4}\selectfont}
+				\umlobject{ROSAPP}
+				\umlobject{ActionWrapper}
+				\umlobject{ROSControl}
+				\begin{umlcall}[op=FollowJointGSplineGoal,return=FollowJointGSplineFeedBack]{ROSAPP}{ActionWrapper}
+					\begin{umlcall}[op=FollowJointGSplineGoal,return=FollowJointTrajectoryFeedBack]{ActionWrapper}{ROSControl}
+					\end{umlcall}
+				\end{umlcall}
+				\begin{umlcall}[op=FollowJointGSplineCancel]{ROSAPP}{ActionWrapper}
+					\begin{umlcallself}[op=optimization]{ActionWrapper}{ActionWrapper}
+					\end{umlcallself}
+					\begin{umlcall}[op=FollowJointGSplineGoal,return=FollowJointTrajectoryFeedBack]{ActionWrapper}{ROSControl}
+					\end{umlcall}
+				\end{umlcall}
+			\end{umlseqdiag}
+		\end{tikzpicture}
+	\end{center}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -73,7 +102,6 @@ default_planner_request_adapters/FixStartStatePathConstraints
 	          \end{lstlisting}
 		\item  Controller Manager \Verb|gsplines_moveit/GSplinesControllerManager|
 	\end{itemize}
-
 \end{frame}
 
 \begin{frame}[t]
