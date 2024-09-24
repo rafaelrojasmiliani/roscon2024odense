@@ -1,26 +1,74 @@
 \section{Goals}
 
 \begin{frame}[t]
-	\framesubtitle{}
+	\frametitle{Goals}
 
-	\begin{itemize}
-		\item General definition of a trajectory
-		      \begin{equation*}
-			      \text{GSpline}:[t_0, t_f] \longrightarrow \mathbb{R}^n
-		      \end{equation*}
-		\item Posibility of defining Analytic operations (Analytical consistency)
-		      \begin{equation*}
-			      \diffk{}{t}{k}:\text{GSpline}\longrightarrow \text{GSpline}
-		      \end{equation*}
-		\item Posibility to define algebraic operations
-		      \begin{eqnarray*}
-			      +:\text{GSpline}\longrightarrow \text{GSpline}\\
-			      \cdot:\mathbb{R} \times \text{GSpline}\longrightarrow \text{GSpline}
-		      \end{eqnarray*}
-		\item Linear Scaling
-		      \begin{eqnarray*}
-			      \left[t \rightarrow \sigma t \right]:\text{GSpline}\longrightarrow \text{GSpline}
-		      \end{eqnarray*}
-	\end{itemize}
+	{\fontsize{10}{5}
+		\begin{itemize}
+			\item Provide a unique interface to the user a \Verb|GSpline| class that represents all these minimum-X and more generic trajectories
+			\item Design that class in terms of a minimal set of axioms derived from the mathematical foundations of the minimum-X optimization
+			\item Expose the fundamental operations
+			      \begin{itemize}
+				      \item Derivatives
+				      \item Elementary linear operations
+				      \item Linear Scaling
+				      \item Evaluate at arbitrary time instants
+			      \end{itemize}
+		\end{itemize}
+	}
 \end{frame}
 
+\begin{frame}[t]
+	\frametitle{Goals: Fundamental Axioms}
+	{\fontsize{9}{5}
+		\begin{itemize}
+			\item defining Analytic operations (Analytical consistency)
+			      \begin{equation*}
+				      \diffk{}{t}{k}:\text{GSpline}\longrightarrow \text{GSpline}
+			      \end{equation*}
+			\item to define algebraic operations
+			      \begin{eqnarray*}
+				      +:\text{GSpline}\longrightarrow \text{GSpline}\\
+				      \cdot:\mathbb{R} \times \text{GSpline}\longrightarrow \text{GSpline}
+			      \end{eqnarray*}
+			\item Linear Scaling
+			      \begin{eqnarray*}
+				      \left[t \rightarrow \sigma t \right]:\text{GSpline}\longrightarrow \text{GSpline}
+			      \end{eqnarray*}
+		\end{itemize}
+		It's essential that these operations are closed within the same class: that is, performing any of these operations on instances of \Verb|GSpline| should result in another \Verb|GSpline| object
+	}
+\end{frame}
+\begin{frame}[t]
+	\frametitle{Goals: Monoid property}
+
+	{\fontsize{10}{5}
+		A \textbf{monoid} is an algebraic structure consisting of a set $M$ equipped with a binary operation
+		$ \ast : M \times M \to M $ that satisfies the following properties:
+
+		1. \textbf{Closure}:
+		\begin{eqnarray*}
+			\forall a, b \in M, \quad a \ast b \in M
+		\end{eqnarray*}
+
+		2. \textbf{Associativity}:
+		\begin{eqnarray*}
+			\forall a, b, c \in M, \quad (a \ast b) \ast c = a \ast (b \ast c)
+		\end{eqnarray*}
+
+		3. \textbf{Identity Element}:
+		\begin{eqnarray*}
+			\exists e \in M \text{ such that } \forall a \in M, \quad e \ast a = a \ast e = a
+		\end{eqnarray*}
+
+	}
+\end{frame}
+\begin{frame}[t]
+	\frametitle{Goals: Monoid property}
+	\begin{itemize}
+		\item Composition is a fundamental tool in programming, the Monoid structure is the most fundamental compositional structure
+	\end{itemize}
+
+	\includegraphics[height=0.2\textwidth]{./images/ccpconMonoids.png}
+	\includegraphics[height=0.2\textwidth]{./images/FunctionalProgrammingForDummies.jpeg}
+\end{frame}
