@@ -134,17 +134,52 @@ public:
 \end{frame}
 
 \begin{frame}[fragile]
-	\frametitle{General operations}
+	\frametitle{Design: General operations}
 	We also desire to work with trajectories that are not gsplines
-	\begin{tikzpicture}[scale=0.9]
-		\tikzumlset{font=\fontsize{5}{4}\selectfont}
-		\umlemptyclass[x=0, y=0]{FunctionBase}
-		\umlemptyclass[x=-3, y=-2]{CustomFunction}
-		\umlemptyclass[x=3, y=-2]{FunctionExpression}
-		\umlVHVinherit[] {FunctionExpression}{FunctionBase}
-		\umlVHVinherit[] {CustomFunction}{FunctionBase}
-		\umlHVHunicompo[anchor1=east,angle1=0, arm1=1cm, angle2=0,mult1=1, mult2=1..*] {FunctionExpression}{FunctionBase}
-	\end{tikzpicture}
+	\begin{itemize}
+		\item The norm of a derivative ${\left\| \ddot \qv \right\|}^2$
+		\item Non linear parametrization $ \qv \circ s $, where $\qv, s\in \text{\Verb|GSpline|}$
+	\end{itemize}
+	For this reason we also provide interface to construct expressions
+	\begin{itemize}
+		\item Addition and scalar multiplication
+		\item Concatenating functions
+		\item Compisition
+	\end{itemize}
+	\begin{center}
+		\begin{tikzpicture}[scale=0.9]
+			\tikzumlset{font=\fontsize{5}{4}\selectfont}
+			\umlemptyclass[x=0, y=0]{FunctionBase}
+			\umlemptyclass[x=-3, y=-2]{CustomFunction}
+			\umlemptyclass[x=3, y=-2]{FunctionExpression}
+			\umlVHVinherit[] {FunctionExpression}{FunctionBase}
+			\umlVHVinherit[] {CustomFunction}{FunctionBase}
+			\umlHVHunicompo[anchor1=east,angle1=0, arm1=1cm, angle2=0,mult1=1, mult2=1..*] {FunctionExpression}{FunctionBase}
+		\end{tikzpicture}
+	\end{center}
+\end{frame}
+\begin{frame}[fragile]
+	\frametitle{Design: General Overview}
+	\begin{center}
+		\begin{tikzpicture}
+			\tikzumlset{font=\fontsize{5}{4}\selectfont}
+			\umlemptyclass[x=0, y=0]{FunctionBase}
+			\umlemptyclass[x=3, y=-2]{FunctionExpression}
+			\umlVHVinherit[] {FunctionExpression}{FunctionBase}
+			\umlHVHunicompo[anchor1=east,angle1=0, arm1=1cm, angle2=0,mult1=1, mult2=1..*] {FunctionExpression}{FunctionBase}
+			\tikzumlset{font=\fontsize{5}{4}\selectfont}
+			\umlemptyclass[y=-4]{GSpline}
+			\umlemptyclass[x=7, y=-4]{Basis}
+			\umlunicompo [angle1=-90, angle2=-140 ] {GSpline}{Basis}
+			\umlemptyclass[x=3, y=-6]{BasisLagrange}
+			\umlemptyclass[x=6, y=-6]{BasisLegendre}
+			\umlemptyclass[x=9, y=-6]{CustomBasis}
+			\umlVHVinherit[] {CustomBasis}{Basis}
+			\umlVHVinherit[] {BasisLagrange}{Basis}
+			\umlVHVinherit[] {BasisLegendre}{Basis}
+			\umlVHVinherit[] {GSpline}{FunctionBase}
+		\end{tikzpicture}
+	\end{center}
 \end{frame}
 
 \begin{frame}[fragile]
