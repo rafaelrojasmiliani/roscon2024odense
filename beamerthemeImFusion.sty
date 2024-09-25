@@ -90,3 +90,17 @@
 \setbeamertemplate{itemize item}{\custombluebullet} % Set the custom blue bullet for itemize
 \setbeamertemplate{itemize subitem}{\custombluebullet} % Apply the same for subitems (optional)
 
+
+\setbeamercolor{thank you slide}{bg=darkgrey} % Alternatively use RGB
+% Define a custom thank you slide template
+\setbeamertemplate{thank you slide}{
+	\begin{beamercolorbox}[wd=\paperwidth, ht=\paperheight, sep=0pt]{thank you slide}
+		% Add the image to the top-left corner
+		\includegraphics[width=7cm]{./images/logo.png} % Your image
+		\vskip1em
+		\vspace{2cm}
+		\textbf{\Huge{Thank You!}} % Custom thank you text
+		\vspace{1cm}
+	\end{beamercolorbox}
+}
+
