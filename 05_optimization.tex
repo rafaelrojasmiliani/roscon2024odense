@@ -29,6 +29,9 @@ plot2d_compare([c1, c2, c3, c4, c5], [
             'min snap', 'min crackle'])
 
     \end{lstlisting}
+			\begin{itemize}
+				\item These overshoots make these motions unreliable and collision-prone
+			\end{itemize}
 		\end{column}
 		\begin{column}{0.6\textwidth}
 			\includegraphics[width=\textwidth]{./images/comparison.png}
@@ -40,6 +43,12 @@ plot2d_compare([c1, c2, c3, c4, c5], [
 	\frametitle{Optimization: Interface}
 	\begin{columns}
 		\begin{column}{0.4\textwidth}
+			\begin{itemize}
+				\item By balancing the jerk with the velocity we can reduce these overshoots
+				      \begin{equation*}
+					      \min \int_0^T \alpha \diff{\qv}{t}  + (1-\alpha) \diffk{\qv}{t}{3} \d t
+				      \end{equation*}
+			\end{itemize}
 			\begin{lstlisting}[language=python]
 
 waypoints = np.random.rand(4, 2)
@@ -58,8 +67,62 @@ plot2d_compare([c1, c2, c3, c4, c5], [
     \end{lstlisting}
 		\end{column}
 		\begin{column}{0.6\textwidth}
-			\includegraphics[width=\textwidth]{./images/comparison.png}
+			\includegraphics[width=\textwidth]{./images/comparison_2.png}
 		\end{column}
 	\end{columns}
 
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{A better type of motions}
+	\includegraphics[width=\textwidth]{./images/temporal_slide_trapezoidal_and_corners.png}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Comparison with Ruckig and Pilz}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{OpStop: Interface}
+	\begin{columns}
+		\begin{column}{0.4\textwidth}
+			\begin{lstlisting}[language=python]
+import gsplines
+import gsplines.plot as gplot
+import numpy as np
+import opstop
+from gsplines.optimization import minimum_jerk_path
+
+
+model_file = 'path_to_urdf_robot_description'
+
+dim = 7   # number of joints of the robot
+# Generate a random numpy array of wayponts
+# (each row is a waypoint in R^n)
+number_of_waypoints = 5
+waypoints = np.random.rand(number_of_waypoints, dim)
+# The a minimum jerk trajectory with execution time of 5s
+trj = minimum_jerk_path(waypoints).linear_scaling_new_execution_time(5.0)
+# Select the time to stop as the 60% of the time.
+stop_ti = trj.get_domain()[1]*0.6
+# Get a parametrization that minimizes the time and  does not
+# allow an increment in the acceleration larger than 50%
+optimal_parametrization = opstop.minimum_time_bounded_acceleration(
+    trj, stop_ti, 1.5, str(model_file), 8)
+# Obtain the stopping trajectory
+stop_trj = trj.compose(optimal_parametrization)
+# Plot the nominal and the stopping trajectory
+gplot.plot_compare([stop_trj, trj], ['red', 'blue'], [
+                       'Emergency Stop Trajectory',
+                                          'Original Trajectory'], _show=True, _up_to_deriv=2)
+    \end{lstlisting}
+		\end{column}
+		\begin{column}{0.6\textwidth}
+			\includegraphics[width=3cm]{./images/temporal_opstopimage.png}
+		\end{column}
+	\end{columns}
+\end{frame}
+\begin{frame}
+	\frametitle{OpStp}
 \end{frame}

@@ -15,10 +15,25 @@
 		-\alpha_1 \diffk{\qv}{t}{2}+ \alpha_2 \diffk{\qv}{t}{4}- \cdots +  {(-1)}^k \alpha_k \diffk{\qv}{t}{2k}= 0 \ \ \text{a.e.}
 	\end{equation*}
 
-	At each time-interval we have
+	At the $i$-interval we have
 	\begin{equation*}
-		\qv(t) = \xv_1 \basis_1
+		\qv(t) = \xv_{i_1} \basis_1 + \cdots +  \xv_{i_{2k}} \basis_{2k}
 	\end{equation*}
+\end{frame}
+\begin{frame}[t]
+	\frametitle{Mathematical Foundations}
+
+
+	The solution of the corresponding Euler-Lagrange equations
+
+	\begin{equation*}
+		-\alpha_1 \diffk{\qv}{t}{2}+ \alpha_2 \diffk{\qv}{t}{4}- \cdots +  {(-1)}^k \alpha_k \diffk{\qv}{t}{2k}= 0 \ \ \text{a.e.}
+	\end{equation*}
+	\begin{itemize}
+		\item  Number of intervals
+		\item Number of basis
+		\item Coefficients
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[t]
@@ -51,9 +66,9 @@
 \end{frame}
 \begin{frame}[t]
 	\frametitle{Mathematical Foundations: Linear Time-scaling invariance}
-	If we desire a Time-scaling invariant cost function, we need to choose
+	If we desire a linear-time-scaling invariant cost function, we need to choose
 	\begin{equation*}
-		\min \int_{t_0}^{t_f} \frac{\alpha_1}{T^2} \left\|\diff{\qv}{t}\right\|^2 + \frac{\alpha_2}{T^4}\left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \frac{\alpha_k}{T^{2k}}\left\|\diffk{\qv}{t}{k} \right\|^2 \d t
+		\min \int_{t_0}^{t_f} \alpha_1 T^2 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 T^4 \left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \alpha_k T^{2k}\left\|\diffk{\qv}{t}{k} \right\|^2 \d t
 	\end{equation*}
 \end{frame}
 
