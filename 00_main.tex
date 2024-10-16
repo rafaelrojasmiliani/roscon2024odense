@@ -1,7 +1,9 @@
 % Creating a simple Title Page in Beamer
 \documentclass[aspectratio=169]{beamer}
+\usepackage{svg}
 \usepackage{tikz}
 \usepackage{tikz-uml}
+
 \usetikzlibrary{shapes}
 \usetikzlibrary{arrows}      % use arrow with 90°
 \usetikzlibrary{arrows.meta}      % use arrow with 90°
@@ -82,23 +84,33 @@
 \usetheme{ImFusion}
 
 % Title page details: 
-\title{GSplines: An
-	analytically and algebraically consistency library for motion planning and optimization}
+\title{GSplines: An analytically and algebraically consistent \\
+	library for motion planning and optimization}
 \author{Rafael A. Rojas}
-\date{\today}
+\date{ROSCon Odense: Day One, October 22nd, 2024}
 
 
 \begin{document}
-
-\frame{\titlepage}
+{
+\setbeamertemplate{footline}{}
+\begin{frame}
+	\titlepage
+\end{frame}
+\addtocounter{framenumber}{-1}
+}
 \include{./01_imfusion.tex}
+\begin{frame}
+	\frametitle{Table of Contents}
+	\tableofcontents
+\end{frame}
 \include{./02_motivation.tex}
 \include{./03_goals.tex}
 \include{./04_design.tex}
 \include{./05_optimization.tex}
 \include{./06_ros.tex}
 \include{./07_sasha.tex}
-%\include{./08_conclusions.tex}
+\include{./08_conclusions.tex}
+\setbeamertemplate{footline}{}
 \begin{frame}
 	\usebeamertemplate{thank you slide}
 \end{frame}

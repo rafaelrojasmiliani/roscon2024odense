@@ -7,25 +7,64 @@
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
 				\begin{itemize}
-					\item Minimum jerk seems to be a thing
-					      \begin{equation*}
-						      \int_0^T \left\|\diffk{\qv}{t}{3}\right\| \d t
-					      \end{equation*}
+					\only<1>{%
+					\item {\bf Minimum Jerk} seems to be a thing
 					      \begin{itemize}
-						      \item Low frequency composition and  wear
-						      \item Human-like motions accordint to Flash and Hogan
-						      \item Psycological safety accoreding ...
+						      \item Low frequency composition: low wear
+						      \item Human-like motions: Flash and Hogan
+						      \item Psychological safety
 					      \end{itemize}
-					\item Minium Snap is of interest for drone motion planning
-					      \begin{equation*}
-						      \int_0^T \left\|\diffk{\qv}{t}{4}\right\| \d t
-					      \end{equation*}
-					\item Minium-X
+					      }
+					      \only<2>{%
+					\item Minimum Snap is of interest for drone motion planning
+					      }
+					      \only<3>{%
+					\item Minimum-X
+					      }
 				\end{itemize}
 			\end{column}
 			\begin{column}{0.5\textwidth}
 				\begin{center}
-					\includegraphics[width=0.4\textwidth]{./images/flashAndHoganExperiment.png}
+					\only<1>{
+						\vskip-1cm
+						\large
+						\begin{equation*}
+							\min  \int_0^T \left\|\diffk{\qv}{t}{3}\right\| \d t
+						\end{equation*}
+					}
+					\only<2>{
+						\large
+						\begin{equation*}
+							\min  \int_0^T \left\|\diffk{\qv}{t}{4}\right\| \d t
+						\end{equation*}
+					}
+					\only<3>{
+						\large
+						\begin{equation*}
+							\min  \int_0^T \left\|\diffk{\qv}{t}{X}\right\| \d t
+						\end{equation*}
+					}
+					\begin{tikzpicture}
+						\only<1>{
+							\node[] (title) {%
+								\includegraphics[width=\textwidth]{./images/flashAndHoganTitle.png}
+							};
+							\node[anchor=north east] at (title.south east) {%
+								\includegraphics[width=0.3\textwidth]{./images/flashAndHoganExperiment.png}
+							};
+							\node[anchor=north west] (foo) at (title.south west) {%
+								\includegraphics[width=0.3\textwidth]{./images/freq.pdf}
+							};
+							\node[anchor=north west] at (foo.south west) {%
+								\includegraphics[width=\textwidth]{./images/image27.png}
+							};
+						}
+						\only<2>{
+							\node[] (title) {%
+								\includegraphics[width=\textwidth]{./images/mellingerKumarMinSnap.png}
+							};
+						}
+					\end{tikzpicture}
 				\end{center}
 			\end{column}
 		\end{columns}
@@ -35,14 +74,14 @@
 \begin{frame}[t]
 	\frametitle{Motivation: Output of Motion Planners}
 	\begin{itemize}
-		\item Sampled based planners generated waypoints
+		\item Sampled based \textbf{motion planners} generate waypoints that must be connected
 		\item Lead-Through/Hand-Guiding programming of cobots
 		      \includemedia[
 			      width=0.6\linewidth,   % Adjust width
 			      height=0.4\linewidth,  % Adjust height
-			      activate=onclick,      % Video starts on click
-			      addresource=./images/cobotWaypoints.mp4, % Path to the video
-			      flashvars={source=./images/cobotWaypoints.mp4&autoPlay=true&loop=true}
+			      activate=pageopen,      % Video starts on click
+			      addresource=images/cobotWaypoints.mp4, % Path to the video
+			      flashvars={source=images/cobotWaypoints.mp4&autoPlay=true&loop=true}
 		      ]{}{VPlayer.swf}
 	\end{itemize}
 \end{frame}
