@@ -1,55 +1,21 @@
 \begin{frame}[fragile]
-	\frametitle{Integration with ROS types}
-	\begin{lstlisting}
-        #  This message represents a generalized spline
-        # Name of the basis
-        string name
-        # Dimension of the vector space defined by the basis
-        int32 dim
-        # Parameters
-        float64[] parameters
-	\end{lstlisting}
-	\begin{lstlisting}
-        #  This message represents a generalized spline
-
-        float64 domain_left_boundary
-        float64 domain_right_boundary
-        int32 codom_dim
-        int32 number_of_intervals
-        gsplines_msgs/Basis basis
-        float64[] coefficients
-        float64[] interval_lengths
-	\end{lstlisting}
-	\begin{lstlisting}
-        Header header
-        string[] name
-        gsplines_msgs/GSpline gspline
-	\end{lstlisting}
+	\frametitle{Integration with ROS}
 	\begin{itemize}
-		\item \Verb|trajectory_msgs::JointTrajectory|
-		\item \Verb|control_msgs::FollowJointTrajectoryGoal|
-
+		\item Custom messages for \Verb|GSpline| objects: Trajectories, Basis.
+		\item Conversions from \Verb|GSpline| into \Verb|trajectory_msgs::JointTrajectory| and \Verb|control_msgs::FollowJointTrajectoryGoal|
+		\item Custom plot tool with \Verb|rqt| plugin based on the amasing \Verb|rqt_joint_trajectory_plot|
+		\item Moveit Planner adapter \Verb|gsplines_moveit/MinimumSobolevSeminormAdapter|, can be used inside \Verb|ompl| pipeline
+		      \begin{lstlisting}
+gsplines_moveit/MinimumSobolevSeminormAdapter
+default_planner_request_adapters/FixWorkspaceBounds
+default_planner_request_adapters/FixStartStateBounds
+default_planner_request_adapters/FixStartStateCollision
+default_planner_request_adapters/FixStartStatePathConstraints
+	          \end{lstlisting}
+		\item  Controller Manager \Verb|gsplines_moveit/GSplinesControllerManager|
 	\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]
-	\frametitle{Integration with ROS Control}
-	\begin{itemize}
-		\item \Verb|FollowJointGSpline.action|
-	\end{itemize}
-
-	\begin{center}
-		\begin{tikzpicture}
-			\tikzumlset{font=\fontsize{5}{4}\selectfont}
-			\umlbasiccomponent[x=0, y=-3]{ROSAPP}
-			\umlbasiccomponent[x=4]{ActionWrapper}
-			\umlbasiccomponent[x=7,y=-3]{ROSControl}
-			\umlVHassemblyconnector[interface=FollowJointGSplineAction ,first arm, anchor2=-160] {ROSAPP}{ActionWrapper}
-			\umlVHassemblyconnector[interface=FollowJointTrajectoryAction ,first arm, anchor2=0] {ROSControl}{ActionWrapper}
-		\end{tikzpicture}
-	\end{center}
-
-\end{frame}
 
 \begin{frame}[t]
 	\frametitle{OpStop Integration}
@@ -89,20 +55,6 @@
 	\end{center}
 \end{frame}
 
-\begin{frame}[fragile]
-	\frametitle{Integration with Moveit}
-	\begin{itemize}
-		\item Planner adapter \Verb|gsplines_moveit/MinimumSobolevSeminormAdapter|, can be used inside \Verb|ompl| pipeline
-		      \begin{lstlisting}
-gsplines_moveit/MinimumSobolevSeminormAdapter
-default_planner_request_adapters/FixWorkspaceBounds
-default_planner_request_adapters/FixStartStateBounds
-default_planner_request_adapters/FixStartStateCollision
-default_planner_request_adapters/FixStartStatePathConstraints
-	          \end{lstlisting}
-		\item  Controller Manager \Verb|gsplines_moveit/GSplinesControllerManager|
-	\end{itemize}
-\end{frame}
 
 \begin{frame}[t]
 	\frametitle{Integration with Moveit}

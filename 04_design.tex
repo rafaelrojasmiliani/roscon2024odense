@@ -162,7 +162,11 @@ public:
 		      \end{eqnarray}
 		      \begin{itemize}
 			      \item  \Verb|basis::BasisLegendre|
-			      \item  \Verb|basis::BasisLagrange|
+			      \item  \Verb|basis::BasisLagrange|: \\
+			            \emphImFusion{Gauss-Radau and Gauss-Lobatto} \tikz[remember picture, overlay]{
+				            \node[starburst, draw, minimum width=3cm, minimum height=2cm]
+				            at (3.5, 0.5) {\bf Optimal Control!};
+			            }
 		      \end{itemize}
 		\item Non Polynomial basis
 		      \begin{eqnarray}
@@ -185,7 +189,6 @@ public:
 	\begin{itemize}
 		\item Addition and scalar multiplication
 		\item Concatenating functions
-		\item Composition
 		\item Composition
 	\end{itemize}
 	\begin{center}
@@ -224,19 +227,42 @@ public:
 	\end{center}
 \end{frame}
 
-\begin{frame}[t]
-	\frametitle{Optimization: Dependences}
+\begin{frame}[fragile]
+	\frametitle{Design: Optimization}
+	\begin{columns}
+		\begin{column}{0.3\textwidth}
+			For optimization we rely on
+			\begin{itemize}
+				\item[{\tikz[baseline]{\fill[imfusionBlue] (0,1cm) circle (0.07cm);}}] \includegraphics[height=1.6cm]{images/Ipopt.png}
+				\vglue1cm
+				\item[{\tikz[baseline]{\fill[imfusionBlue] (0,0.5cm) circle (0.07cm);}}] \includegraphics[height=0.8cm]{images/ifopt.png}
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.7\textwidth}
 
-	For optimization we rely on
-	\begin{itemize}
-		\item \includegraphics[height=1cm]{images/ifopt.png}
-		\item \includegraphics[height=2cm]{images/Ipopt.png}
-	\end{itemize}
+			\begin{itemize}
+				\item We provide custom cost functions and constraints
+				\item Currently implementing generic cost and constraints construction tool.
+				\item Fo simple gradiend based, is it possible to
+				      \begin{lstlisting}[language=python,
+	basicstyle=\fontsize{10pt}{0pt}\selectfont\fontfamily{zi4}\selectfont,
+                      ]
+import gsplines
+alpha=0.1
+q=gspliens.GSpline.Zero()
+constFunction = MyConstFunction()
+while not kktCondtitions(constFunction, q):
+    q+= alpha*constFunction.diff(q)
+			\end{lstlisting}
+
+			\end{itemize}
+		\end{column}
+	\end{columns}
 \end{frame}
 
 
 \begin{frame}[fragile]
-	\frametitle{Optimization: Interface}
+	\frametitle{Optimization: Trajectory Generation}
 	\begin{columns}
 		\begin{column}{0.4\textwidth}
 			\begin{lstlisting}[language=python]
@@ -255,9 +281,6 @@ plot2d_compare([c1, c2, c3, c4, c5], [
             'min snap', 'min crackle'])
 
     \end{lstlisting}
-			\begin{itemize}
-				\item These overshoots make these motions unreliable and collision-prone
-			\end{itemize}
 		\end{column}
 		\begin{column}{0.6\textwidth}
 			\includegraphics[width=\textwidth]{./images/comparison.png}
@@ -267,10 +290,12 @@ plot2d_compare([c1, c2, c3, c4, c5], [
 \end{frame}
 
 \begin{frame}[fragile]
-	\frametitle{OpStop: Interface}
+	\frametitle{Optimization: Parametriuation Generation.}
+	\framesubtitle{Minimum time stop for collision avoidance}
 	\begin{columns}
 		\begin{column}{0.4\textwidth}
-			\begin{lstlisting}[language=python]
+			\begin{lstlisting}[language=python,
+            ]
 import gsplines
 import gsplines.plot as gplot
 import numpy as np
@@ -297,48 +322,9 @@ optimal_parametrization = opstop.minimum_time_bounded_acceleration(
 stop_trj = trj.compose(optimal_parametrization)
 # Plot the nominal and the stopping trajectory
 gplot.plot_compare([stop_trj, trj], ['red', 'blue'], [
-                       'Emergency Stop Trajectory',
-                                          'Original Trajectory'], _show=True, _up_to_deriv=2)
-    \end{lstlisting}
-		\end{column}
-		\begin{column}{0.6\textwidth}
-			\includegraphics[width=3cm]{./images/temporal_opstopimage.png}
-		\end{column}
-	\end{columns}
-\end{frame}
-\begin{frame}[fragile]
-	\frametitle{OpStop: Interface}
-	\begin{columns}
-		\begin{column}{0.4\textwidth}
-			\begin{lstlisting}[language=python]
-import gsplines
-import gsplines.plot as gplot
-import numpy as np
-import opstop
-from gsplines.optimization import minimum_jerk_path
-
-
-model_file = 'path_to_urdf_robot_description'
-
-dim = 7   # number of joints of the robot
-# Generate a random numpy array of wayponts
-# (each row is a waypoint in R^n)
-number_of_waypoints = 5
-waypoints = np.random.rand(number_of_waypoints, dim)
-# The a minimum jerk trajectory with execution time of 5s
-trj = minimum_jerk_path(waypoints).linear_scaling_new_execution_time(5.0)
-# Select the time to stop as the 60% of the time.
-stop_ti = trj.get_domain()[1]*0.6
-# Get a parametrization that minimizes the time and  does not
-# allow an increment in the acceleration larger than 50%
-optimal_parametrization = opstop.minimum_time_bounded_acceleration(
-    trj, stop_ti, 1.5, str(model_file), 8)
-# Obtain the stopping trajectory
-stop_trj = trj.compose(optimal_parametrization)
-# Plot the nominal and the stopping trajectory
-gplot.plot_compare([stop_trj, trj], ['red', 'blue'], [
-                       'Emergency Stop Trajectory',
-                                          'Original Trajectory'], _show=True, _up_to_deriv=2)
+                'Emergency Stop Trajectory',
+                'Original Trajectory'], 
+                _show=True, _up_to_deriv=2)
     \end{lstlisting}
 		\end{column}
 		\begin{column}{0.6\textwidth}
