@@ -1,76 +1,101 @@
 
 \section{Design}
-\begin{frame}[t]
-	\frametitle{Mathematical Foundations}
-
-	We consider the problem of the minimization of a \emph{convex} combination of norms of the derivatives
-
-	\begin{equation*}
-		\min \int_{t_0}^{t_f} \alpha_1 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 \left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \alpha_1 \left\|\diffk{\qv}{t}{k} \right\|^2 \d t
-	\end{equation*}
-
-	And the corresponding Euler-Lagrange equations
-
-	\begin{equation*}
-		-\alpha_1 \diffk{\qv}{t}{2}+ \alpha_2 \diffk{\qv}{t}{4}- \cdots +  {(-1)}^k \alpha_k \diffk{\qv}{t}{2k}= 0 \ \ \text{a.e.}
-	\end{equation*}
-
-	At the $i$-interval we have
-	\begin{equation*}
-		\qv(t) = \xv_{i_1} \basis_1 + \cdots +  \xv_{i_{2k}} \basis_{2k}
-	\end{equation*}
-\end{frame}
-\begin{frame}[t]
-	\frametitle{Mathematical Foundations}
+\begin{frame}[fragile]
+	\frametitle{Class Design: Solution Representation}
 
 
-	The solution of the corresponding Euler-Lagrange equations
+	\begin{tikzpicture}
+		\node[anchor=north west] at (-1, 4){%
+			\parbox{10cm}{%
+				\small
+				The solution of the corresponding Euler-Lagrange equations
+					{%
+						\begin{equation*}
+							-\alpha_1 \diffk{\qv}{t}{2}+ \alpha_2 \diffk{\qv}{t}{4}- \cdots +  {(-1)}^k \alpha_k \diffk{\qv}{t}{2k}= 0 \ \ \text{a.e.}
+						\end{equation*}
+					}
+			}};
 
-	\begin{equation*}
-		-\alpha_1 \diffk{\qv}{t}{2}+ \alpha_2 \diffk{\qv}{t}{4}- \cdots +  {(-1)}^k \alpha_k \diffk{\qv}{t}{2k}= 0 \ \ \text{a.e.}
-	\end{equation*}
-	\begin{itemize}
-		\item  Number of intervals
-		\item Number of basis
-		\item Coefficients
-	\end{itemize}
-\end{frame}
+		\only<4>{
+			\node[rectangle split, rectangle split allocate boxes=5,
+				rectangle split parts=5,
+				anchor=north west,
+				font=\ttfamily,
+				align=left,
+				rectangle split part align=left] at (-1, 2) (class) {class GSpline\{
+				\nodepart{second}
+				\hglue1cm Eigen::VectorXd coefficients\_;
+				\nodepart{third}
+				\hglue1cm Eigen::MatrixXd time\_interval\_lengths\_;
+				\nodepart{fourth}
+				\hglue1cm Basis basis\_;\\
+				\}
+			};
+			\draw[->] ($(class.two east)-(1.9, 0)$) -- ++(4, 0) node[anchor=west, name=ll]{$[\av_0^1$ \ $\cdots$ \ $\av_{2k}^1\cdots]$};
+			\draw[->] (class.three east) -- (class.three east -| ll.west) node[anchor=west]{$[\tau_1\ \cdots \ \tau_{N}]$};
+			\draw[->] ($(class.four east)-(5, 0)$) -- (class.four east -| ll.west) node[anchor=west]{$[B_i, \cdots, B_{2k}]$};
 
-\begin{frame}[t]
-	\frametitle{Mathematical Foundations: Features}
-
-	We can prove that the solution of these ODEs respect the desired properites
-		{\fontsize{10}{5}
-			\begin{itemize}
-				\item Analytical consistency:
-				      \begin{equation*}
-					      -\alpha_1 \diffk{}{t}{2} \left[\diff{\qv}{t}\right] +  \cdots +  {(-1)}^k \alpha_k \diffk{}{t}{2k} \left[\diff{\qv}{t}\right] = 0 \ \ \text{a.e.}
-				      \end{equation*}
-				\item Algebraic consistency I:\@ Linear Operations
-				      \begin{eqnarray*}
-					      -\alpha_1 \diffk{}{t}{2} \left[\qv_1 + \qv_2\right]  + \cdots +  {(-1)}^k \alpha_k \diffk{}{t}{2k} \left[\qv_1 + \qv_2\right] = 0 \ \ \text{a.e.}
-				      \end{eqnarray*}
-				\item Algebraic consistance II:\@ Linear Scaling
-				      \only<1>{
-					      \begin{eqnarray*}
-						      -\alpha_1 \diffk{}{t}{2} \left[\qv(\sigma t)\right]  + \cdots +  {(-1)}^k \alpha_k \diffk{}{t}{2k} \left[\qv(\sigma t)\right] = 0 \ \ \text{a.e.}
-					      \end{eqnarray*}
-				      }
-				      \only<2>{
-					      \begin{eqnarray*}
-						      -\warntext{\mathbf{\alpha}_1'} \diffk{}{t}{2} \left[\qv(\sigma t)\right]  + \cdots +  {(-1)}^k \alpha_k \diffk{}{t}{2k} \left[\qv(\sigma t)\right] = 0 \ \ \text{a.e.}
-					      \end{eqnarray*}
-				      }
-			\end{itemize}
 		}
+		\only<1>{
+		\foreach \x/\t in {0/0, 0.6/1, 2/2, 6.9/{N-1},  8.2/{N}} {
+		\draw[->] (\x,0.2) -- (\x, 0.5) node[anchor=south]{$\wp_{\t}$};
+		}
+		\foreach \x/\t in { 3.7/j, 5.1/{j+1}} {
+		\draw[->] (\x,-0.7) -- ++(0, -0.3) node[anchor=north]{$\wp_{\t}$};
+		}
+		\node at (11, 2.7){\parbox{3cm}{\textbf{Unknows}:\\ $t_j$ and $\tau_j$}};
+		}
+		\only<1-3>{
+		% Draw the horizontal line representing the time interval
+		\draw[thick,->] (0,0) -- (9,0) ;
+
+		% Label the start of the interval
+
+		% Define the number of sub-intervals
+		\foreach \x/\t in {0/{$t_{0}$}, 0.6/{$t_{1}$}, 2/{$t_{2}$}, 3/{$\cdots$}, 3.7/{$t_j$}, 5.1/{$t_{j+1}$}, 6/{$\cdots$}, 6.9/{$t_{N-1}$}, 8.2/{$t_f$} } {
+		\node[anchor=north] at (\x,0) {\Large\t};
+		}
+
+		\foreach \x/\t in {0, 0.6, 2, 3.7, 5.1, 6.9,  8.2} {
+				\draw[thick] (\x,0.1) -- (\x,-0.1);
+			}
+
+		\draw[decorate,decoration={brace,amplitude=10pt}] (3.7,0.5) -- (5.1,0.5) node[midway,yshift=0.7cm,name=SolI] {
+			\only<2>{$\qv(t)=\sum_{i=1}^{2k} \av^{\ j}_i B_i(t)$}
+			\only<1>{$\tau_i = t_{j+1} - t_j$}
+		};
+		\only<2>{\draw[decorate,decoration={brace,mirror,amplitude=10pt}] (0.6,-0.7) -- (2,-0.7) node[midway,yshift=-0.7cm,name=A] {$\qv(t)=\sum_{i=1}^{2k} \av^{\ 1}_i B_i(t)$}};
+		\draw[decorate,decoration={brace,mirror,amplitude=10pt}] (6.9,-0.7) -- (8.2,-0.7) node[midway,yshift=-0.7cm, name=SolN] {
+			\only<2>{$\qv(t)=\sum_{i=1}^{2k} \av^{\ 1}_i B_i(t)$}
+			\only<1>{$\tau_i = t_{f} - t_{N-1}$}
+
+		};
+
+		\only<2>{%
+		\matrix (mymatrix) [matrix of nodes, nodes in empty cells, left delimiter={[}, right delimiter={]}] at (12,1) {
+						$\vdots$ \\  $\av_0^j$ \\ $\vdots$ \\ $\av_{2k}^j$ \\ $\vdots$  \\  $\av_0^{N-1}$ \\ $\vdots$ \\ $\av_{2k}^0$ \\
+					};
+				\draw[decorate,decoration={brace,mirror, amplitude=10pt}] ($(mymatrix-2-1)+(-1, 0.3)$) -- ($(mymatrix-4-1)+(-1, -0.3)$) coordinate[midway, xshift=-0.5, name=I1];
+				\draw[thick, ->] (SolI.east) -| ++(2, 0) |- ($(I1.west)+(-0.4,0)$);
+				\draw[decorate,decoration={brace,mirror, amplitude=10pt}] ($(mymatrix-6-1)+(-1, 0.3)$) -- ($(mymatrix-8-1)+(-1, -0.3)$) coordinate[midway, xshift=-0.5, name=I1];
+				\draw[thick, ->] (SolN.east) -| ++(0.4, 0) |- ($(I1.west)+(-0.4,0)$);
+			}
+		\only<3>{%
+		\matrix (mymatrix) [matrix of nodes, nodes in empty cells, left delimiter={[}, right delimiter={]}] at (12,1) {
+						$\tau_0$ \\ $\vdots$ \\  $\tau_j$ \\  $\vdots$ \\ $\tau_{N-1}$  \\
+					};
+				\draw[thick, ->] (SolI.east) -| ++(2, 0) |- ($(mymatrix-3-1)+(-0.4,0)$);
+				\draw[thick, ->] (SolN.east) -| ++(2, 0) |- ($(mymatrix-5-1)+(-0.4,0)$);
+			}
+		\only<3>{%
+			\draw[decorate,decoration={brace,amplitude=10pt}] (0,0.5) -- (0.6,0.5) node[midway,yshift=0.7cm,name=SolI] {};
+			\draw[thick, ->] (SolI.south) |- ++(10, 0.8)  |- ($(mymatrix-1-1)+(-0.4,0)$);
+		}
+		}
+	\end{tikzpicture}
+	\vfill
 \end{frame}
-\begin{frame}[t]
-	\frametitle{Mathematical Foundations: Linear Time-scaling invariance}
-	If we desire a linear-time-scaling invariant cost function, we need to choose
-	\begin{equation*}
-		\min \int_{t_0}^{t_f} \alpha_1 T^2 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 T^4 \left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \alpha_k T^{2k}\left\|\diffk{\qv}{t}{k} \right\|^2 \d t
-	\end{equation*}
-\end{frame}
+
 
 \begin{frame}[fragile]
 	\frametitle{Class Design: Overview}
@@ -129,6 +154,7 @@ public:
 \end{frame}
 
 \begin{frame}[fragile]
+	\frametitle{Class Design: Bases Implemented}
 	\begin{itemize}
 		\item Polynomial Basis solution of
 		      \begin{eqnarray}
@@ -159,7 +185,8 @@ public:
 	\begin{itemize}
 		\item Addition and scalar multiplication
 		\item Concatenating functions
-		\item Compisition
+		\item Composition
+		\item Composition
 	\end{itemize}
 	\begin{center}
 		\begin{tikzpicture}[scale=0.9]
@@ -197,3 +224,125 @@ public:
 	\end{center}
 \end{frame}
 
+\begin{frame}[t]
+	\frametitle{Optimization: Dependences}
+
+	For optimization we rely on
+	\begin{itemize}
+		\item \includegraphics[height=1cm]{images/ifopt.png}
+		\item \includegraphics[height=2cm]{images/Ipopt.png}
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{Optimization: Interface}
+	\begin{columns}
+		\begin{column}{0.4\textwidth}
+			\begin{lstlisting}[language=python]
+
+waypoints = np.random.rand(4, 2)
+
+c1 = broken_lines_path(waypoints)
+c2 = minimum_acceleration_path(waypoints)
+c3 = minimum_jerk_path(waypoints)
+c4 = minimum_snap_path(waypoints)
+c5 = minimum_crackle_path(waypoints)
+
+plot2d_compare([c1, c2, c3, c4, c5], [
+            'green', 'blue', 'magenta', 'red', 'black'],
+            ['min vel', 'min acceleration', 'min jerk',
+            'min snap', 'min crackle'])
+
+    \end{lstlisting}
+			\begin{itemize}
+				\item These overshoots make these motions unreliable and collision-prone
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.6\textwidth}
+			\includegraphics[width=\textwidth]{./images/comparison.png}
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{OpStop: Interface}
+	\begin{columns}
+		\begin{column}{0.4\textwidth}
+			\begin{lstlisting}[language=python]
+import gsplines
+import gsplines.plot as gplot
+import numpy as np
+import opstop
+from gsplines.optimization import minimum_jerk_path
+
+
+model_file = 'path_to_urdf_robot_description'
+
+dim = 7   # number of joints of the robot
+# Generate a random numpy array of wayponts
+# (each row is a waypoint in R^n)
+number_of_waypoints = 5
+waypoints = np.random.rand(number_of_waypoints, dim)
+# The a minimum jerk trajectory with execution time of 5s
+trj = minimum_jerk_path(waypoints).linear_scaling_new_execution_time(5.0)
+# Select the time to stop as the 60% of the time.
+stop_ti = trj.get_domain()[1]*0.6
+# Get a parametrization that minimizes the time and  does not
+# allow an increment in the acceleration larger than 50%
+optimal_parametrization = opstop.minimum_time_bounded_acceleration(
+    trj, stop_ti, 1.5, str(model_file), 8)
+# Obtain the stopping trajectory
+stop_trj = trj.compose(optimal_parametrization)
+# Plot the nominal and the stopping trajectory
+gplot.plot_compare([stop_trj, trj], ['red', 'blue'], [
+                       'Emergency Stop Trajectory',
+                                          'Original Trajectory'], _show=True, _up_to_deriv=2)
+    \end{lstlisting}
+		\end{column}
+		\begin{column}{0.6\textwidth}
+			\includegraphics[width=3cm]{./images/temporal_opstopimage.png}
+		\end{column}
+	\end{columns}
+\end{frame}
+\begin{frame}[fragile]
+	\frametitle{OpStop: Interface}
+	\begin{columns}
+		\begin{column}{0.4\textwidth}
+			\begin{lstlisting}[language=python]
+import gsplines
+import gsplines.plot as gplot
+import numpy as np
+import opstop
+from gsplines.optimization import minimum_jerk_path
+
+
+model_file = 'path_to_urdf_robot_description'
+
+dim = 7   # number of joints of the robot
+# Generate a random numpy array of wayponts
+# (each row is a waypoint in R^n)
+number_of_waypoints = 5
+waypoints = np.random.rand(number_of_waypoints, dim)
+# The a minimum jerk trajectory with execution time of 5s
+trj = minimum_jerk_path(waypoints).linear_scaling_new_execution_time(5.0)
+# Select the time to stop as the 60% of the time.
+stop_ti = trj.get_domain()[1]*0.6
+# Get a parametrization that minimizes the time and  does not
+# allow an increment in the acceleration larger than 50%
+optimal_parametrization = opstop.minimum_time_bounded_acceleration(
+    trj, stop_ti, 1.5, str(model_file), 8)
+# Obtain the stopping trajectory
+stop_trj = trj.compose(optimal_parametrization)
+# Plot the nominal and the stopping trajectory
+gplot.plot_compare([stop_trj, trj], ['red', 'blue'], [
+                       'Emergency Stop Trajectory',
+                                          'Original Trajectory'], _show=True, _up_to_deriv=2)
+    \end{lstlisting}
+		\end{column}
+		\begin{column}{0.6\textwidth}
+			\includegraphics[width=3cm]{./images/temporal_opstopimage.png}
+		\end{column}
+	\end{columns}
+\end{frame}

@@ -17,9 +17,10 @@
 					      }
 					      \only<2>{%
 					\item Minimum Snap is of interest for drone motion planning
-					      }
-					      \only<3>{%
-					\item Minimum-X
+					\item This concept may be generalized to Minimum-X trajectories
+					      \begin{equation*}
+						      \min  \int_0^T \left\|\diffk{\qv}{t}{X}\right\| \d t
+					      \end{equation*}
 					      }
 				\end{itemize}
 			\end{column}
@@ -36,12 +37,6 @@
 						\large
 						\begin{equation*}
 							\min  \int_0^T \left\|\diffk{\qv}{t}{4}\right\| \d t
-						\end{equation*}
-					}
-					\only<3>{
-						\large
-						\begin{equation*}
-							\min  \int_0^T \left\|\diffk{\qv}{t}{X}\right\| \d t
 						\end{equation*}
 					}
 					\begin{tikzpicture}
@@ -75,14 +70,12 @@
 	\frametitle{Motivation: Output of Motion Planners}
 	\begin{itemize}
 		\item Sampled based \textbf{motion planners} generate waypoints that must be connected
+	\end{itemize}
+\end{frame}
+\begin{frame}[t]
+	\frametitle{Motivation: Output of Motion Planners}
+	\begin{itemize}
 		\item Lead-Through/Hand-Guiding programming of cobots
-		      \includemedia[
-			      width=0.6\linewidth,   % Adjust width
-			      height=0.4\linewidth,  % Adjust height
-			      activate=pageopen,      % Video starts on click
-			      addresource=images/cobotWaypoints.mp4, % Path to the video
-			      flashvars={source=images/cobotWaypoints.mp4&autoPlay=true&loop=true}
-		      ]{}{VPlayer.swf}
 	\end{itemize}
 \end{frame}
 

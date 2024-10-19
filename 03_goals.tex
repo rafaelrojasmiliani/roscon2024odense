@@ -5,11 +5,14 @@
 
 	\vfill
 	{\fontsize{10}{6}
-		How to define the \texttt{GSpline} type:
+		Define class \texttt{GSpline} type that is capable to represent
 		\begin{itemize}
-			\item Represent Minimum-X and more generic trajectories
-			\item Use a minimal set of math axioms
-			\item Return the same time after the following operations
+			\item Solutions of the generalized  Minimum-X problem: a \emph{convex} combination of norms of derivatives
+			      \begin{eqnarray*}
+				      &&\min \int_{t_0}^{t_f} \alpha_1 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 \left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \alpha_1 \left\|\diffk{\qv}{t}{k} \right\|^2 \d t \\
+				      &&\qv(t_i) = \wp_i \ \ t_i\ \text{ is unknown}
+			      \end{eqnarray*}
+			\item The following transformations of the trajectory
 			      \begin{itemize}
 				      \item Derivatives
 				      \item Elementary linear operations
@@ -19,50 +22,47 @@
 	}
 	\vfill
 \end{frame}
+\begin{frame}[t]
+	\frametitle{Achieving Our Goal Through Variational Principles}
+
+	We consider the problem of the minimization of a \emph{convex} combination of norms of the derivatives
+
+	\begin{eqnarray*}
+		&&\min \int_{t_0}^{t_f} \alpha_1 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 \left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \alpha_1 \left\|\diffk{\qv}{t}{k} \right\|^2 \d t \\
+		&&\qv(t_i) = \wp_i \ \ t_i\ \text{ is unknown!}
+	\end{eqnarray*}
+
+	Thanks to the \emph{Calculus of variations} we know that any minimizer solves the Euler-Lagrange equations
+
+	\begin{equation*}
+		-\alpha_1 \diffk{\qv}{t}{2}+ \alpha_2 \diffk{\qv}{t}{4}- \cdots +  {(-1)}^k \alpha_k \diffk{\qv}{t}{2k}= 0 \ \ \text{a.e.}
+	\end{equation*}
+
+\end{frame}
 
 \begin{frame}[t]
-	\frametitle{Goals: Fundamental Axioms}
+	\frametitle{Achieving Our Goal Through Variational Principles}
 	{\fontsize{9}{5}
+		We call a \texttt{GSpline} a solution of
+		\begin{equation*}
+			-\alpha_1 \diffk{\qv}{t}{2}+ \alpha_2 \diffk{\qv}{t}{4}- \cdots +  {(-1)}^k \alpha_k \diffk{\qv}{t}{2k}= 0 \ \ \text{a.e.}
+		\end{equation*}
+		Any \texttt{GSpline} Have the following properties
 		\begin{itemize}
-			\item defining Analytic operations (Analytical consistency)
+			\item Analytical Consistency
 			      \begin{equation*}
 				      \diffk{}{t}{k}:\text{GSpline}\longrightarrow \text{GSpline}
 			      \end{equation*}
-			\item to define algebraic operations
+			\item Algebraic Consistency I
 			      \begin{eqnarray*}
-				      +:\text{GSpline}\longrightarrow \text{GSpline}\\
+				      +:\text{GSpline}\times\text{GSpline}\longrightarrow \text{GSpline}\\
 				      \cdot:\mathbb{R} \times \text{GSpline}\longrightarrow \text{GSpline}
 			      \end{eqnarray*}
-			\item Linear Scaling
+			\item Algebraic Consistency II
 			      \begin{eqnarray*}
 				      \left[t \rightarrow \sigma t \right]:\text{GSpline}\longrightarrow \text{GSpline}
 			      \end{eqnarray*}
 		\end{itemize}
-		It's essential that these operations are closed within the same class: that is, performing any of these operations on instances of \Verb|GSpline| should result in another \Verb|GSpline| object
-	}
-\end{frame}
-\begin{frame}[t]
-	\frametitle{Goals: Monoid property}
-
-	{\fontsize{10}{5}
-		A \textbf{monoid} is an algebraic structure consisting of a set $M$ equipped with a binary operation
-		$ \ast : M \times M \to M $ that satisfies the following properties:
-
-		1. \textbf{Closure}:
-		\begin{eqnarray*}
-			\forall a, b \in M, \quad a \ast b \in M
-		\end{eqnarray*}
-
-		2. \textbf{Associativity}:
-		\begin{eqnarray*}
-			\forall a, b, c \in M, \quad (a \ast b) \ast c = a \ast (b \ast c)
-		\end{eqnarray*}
-
-		3. \textbf{Identity Element}:
-		\begin{eqnarray*}
-			\exists e \in M \text{ such that } \forall a \in M, \quad e \ast a = a \ast e = a
-		\end{eqnarray*}
-
 	}
 \end{frame}
 \begin{frame}[t]

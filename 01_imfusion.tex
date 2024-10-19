@@ -31,17 +31,31 @@
 \begin{frame}[t]
 	\frametitle{Robotics}
 	\hglue -1cm
-	\begin{tikzpicture}[scale=1, transform shape]
+	\begin{tikzpicture}[scale=1, transform shape, node distance=0.1cm]
 		\node (a) {
 			\includegraphics[width=3.4cm]{./images/imfusion_picture_03.png}};
+		\node[anchor=north] at (a.south) {
+			\includegraphics[width=2.4cm]{./images/imfusion_picture_04.png}};
 		\node[anchor=north west] (box) at (a.north east) {
 			\parbox{10cm}{%
 				\begin{itemize}
-					\item Deep integration with our framework for surgical navigation, freehand ultrasound, RGBD reconstruction, and more.
+					\item Deep integration with our framework in Robotics
+					\item ROS integration
 					\item Native support for popular robots: Franka Panda, Universal Robot UR-e series, Kuka
-					\item Advanced utilities for key use cases: hand-eye calibration, object tracking, telerobotics, custom control strategies.
+					\item Advanced utilities for key use cases, e.g.  hand-eye calibration
+					\item The ImFusion Robotics Team:
 				\end{itemize}
 			}
 		};
+		\node[anchor=north west] (pic) at (box.south west) {%
+			\includegraphics[width=2cm]{./images/esposito.png}};
+		\node[anchor=west, right=of pic] (maria)  {%
+			\includegraphics[width=2cm]{./images/tirindelli.png}};
+		\node[anchor=west, right=of maria]  (rafa) {%
+			\includegraphics[width=2cm]{./images/rojas.png}};
+		\node[anchor=west, right=of rafa]  (pic) {
+			\includegraphics[width=2cm]{./images/axelrad.png}};
+		\node[anchor=west, right=of pic]  (pic) {
+			\includegraphics[width=2cm]{./images/nik.png}};
 	\end{tikzpicture}
 \end{frame}
