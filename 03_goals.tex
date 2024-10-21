@@ -5,19 +5,21 @@
 
 	\vfill
 	{\fontsize{10}{6}
-		Define class \texttt{GSpline} type that is capable to represent
+		Define class \texttt{GSpline} type that is capable of \emphImFusion{representing}:
 		\begin{itemize}
-			\item Solutions of the generalized  Minimum-X problem: a \emph{convex} combination of norms of derivatives
+			\item \emphImFusion{Solutions} of the generalized  Minimum-X problem: a \emph{convex} combination of norms of derivatives
 			      \begin{eqnarray*}
 				      &&\min \int_{t_0}^{t_f} \alpha_1 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 \left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \alpha_1 \left\|\diffk{\qv}{t}{k} \right\|^2 \d t \\
 				      &&\qv(t_i) = \wp_i \ \ t_i\ \text{ is unknown}
 			      \end{eqnarray*}
-			\item The following transformations of the trajectory
+			\item The following \emphImFusion{transformations}
 			      \begin{itemize}
 				      \item Derivatives
-				      \item Elementary linear operations
+				      \item Linear operations
 				      \item Linear Scaling
 			      \end{itemize}
+			\item Available in \tikz[baseline]{\node{\includegraphics[height=1cm]{images/python-logo-only.png}}} and \tikz[baseline=-1mm]{\node{\includegraphics[height=1cm]{./images/c++logo.png}}}
+			\item \emphImFusion{Remark:} This is not an alternative other general optimization tools like CASADI.
 		\end{itemize}
 	}
 	\vfill
@@ -28,11 +30,11 @@
 	We consider the problem of the minimization of a \emph{convex} combination of norms of the derivatives
 
 	\begin{eqnarray*}
-		&&\min \int_{t_0}^{t_f} \alpha_1 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 \left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \alpha_1 \left\|\diffk{\qv}{t}{k} \right\|^2 \d t \\
+		&&\min \int_{t_0}^{t_f} \alpha_1 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 \left\|\diffk{\qv}{t}{2}\right\|^2 + \cdots  + \alpha_k \left\|\diffk{\qv}{t}{k} \right\|^2 \d t \\
 		&&\qv(t_i) = \wp_i \ \ t_i\ \text{ is unknown!}
 	\end{eqnarray*}
 
-	Thanks to the \emph{Calculus of variations} we know that any minimizer solves the Euler-Lagrange equations
+	Thanks to the \emphImFusion{Calculus of variations} we know that any minimizer solves the Euler-Lagrange equations
 
 	\begin{equation*}
 		-\alpha_1 \diffk{\qv}{t}{2}+ \alpha_2 \diffk{\qv}{t}{4}- \cdots +  {(-1)}^k \alpha_k \diffk{\qv}{t}{2k}= 0 \ \ \text{a.e.}
@@ -43,7 +45,7 @@
 \begin{frame}[t]
 	\frametitle{Achieving Our Goal Through Variational Principles}
 	{\fontsize{9}{5}
-		We call a \texttt{GSpline} a solution of
+		We call a \emphImFusion{\texttt{GSpline}} a solution of
 		\begin{equation*}
 			-\alpha_1 \diffk{\qv}{t}{2}+ \alpha_2 \diffk{\qv}{t}{4}- \cdots +  {(-1)}^k \alpha_k \diffk{\qv}{t}{2k}= 0 \ \ \text{a.e.}
 		\end{equation*}

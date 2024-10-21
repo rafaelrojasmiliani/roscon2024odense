@@ -26,11 +26,12 @@
 				\nodepart{second}
 				\hglue1cm Eigen::VectorXd coefficients\_;
 				\nodepart{third}
-				\hglue1cm Eigen::MatrixXd time\_interval\_lengths\_;
+				\hglue1cm Eigen::VectorXd time\_interval\_lengths\_;
 				\nodepart{fourth}
 				\hglue1cm Basis basis\_;\\
 				\}
 			};
+			\node[anchor=north,yshift=1cm,xshift=-2cm] at (class.south) {\includegraphics[height=3cm]{./images/cheneybook.jpg}};
 			\draw[->] ($(class.two east)-(1.9, 0)$) -- ++(4, 0) node[anchor=west, name=ll]{$[\av_0^1$ \ $\cdots$ \ $\av_{2k}^1\cdots]$};
 			\draw[->] (class.three east) -- (class.three east -| ll.west) node[anchor=west]{$[\tau_1\ \cdots \ \tau_{N}]$};
 			\draw[->] ($(class.four east)-(5, 0)$) -- (class.four east -| ll.west) node[anchor=west]{$[B_i, \cdots, B_{2k}]$};
@@ -180,16 +181,15 @@ public:
 
 \begin{frame}[fragile]
 	\frametitle{Design: General operations}
-	We also desire to work with trajectories that are not gsplines
+	We also desire to work with \emphImFusion{\bf trajectories that are not gsplines}
 	\begin{itemize}
 		\item The norm of a derivative ${\left\| \ddot \qv \right\|}^2$
 		\item Non linear parametrization $ \qv \circ s $, where $\qv, s\in \text{\Verb|GSpline|}$
 	\end{itemize}
-	For this reason we also provide interface to construct expressions
+	For this reason we also provide interface to construct \emphImFusion{general differentiable expressions}
 	\begin{itemize}
-		\item Addition and scalar multiplication
-		\item Concatenating functions
-		\item Composition
+		\item Scalar \Verb|GSplines| times a vector \Verb|GSpline|
+		\item Composition of \Verb|GSplines|
 	\end{itemize}
 	\begin{center}
 		\begin{tikzpicture}[scale=0.9]
@@ -228,32 +228,33 @@ public:
 \end{frame}
 
 \begin{frame}[fragile]
-	\frametitle{Design: Optimization}
+	\frametitle{Out of the Box Optimization}
 	\begin{columns}
 		\begin{column}{0.3\textwidth}
-			For optimization we rely on
 			\begin{itemize}
 				\item[{\tikz[baseline]{\fill[imfusionBlue] (0,1cm) circle (0.07cm);}}] \includegraphics[height=1.6cm]{images/Ipopt.png}
 				\vglue1cm
 				\item[{\tikz[baseline]{\fill[imfusionBlue] (0,0.5cm) circle (0.07cm);}}] \includegraphics[height=0.8cm]{images/ifopt.png}
+				{\tiny https://github.com/ethz-adrl/ifopt}
 			\end{itemize}
 		\end{column}
 		\begin{column}{0.7\textwidth}
 
 			\begin{itemize}
-				\item We provide custom cost functions and constraints
-				\item Currently implementing generic cost and constraints construction tool.
-				\item Fo simple gradiend based, is it possible to
-				      \begin{lstlisting}[language=python,
-	basicstyle=\fontsize{10pt}{0pt}\selectfont\fontfamily{zi4}\selectfont,
-                      ]
-import gsplines
-alpha=0.1
-q=gspliens.GSpline.Zero()
-constFunction = MyConstFunction()
-while not kktCondtitions(constFunction, q):
-    q+= alpha*constFunction.diff(q)
-			\end{lstlisting}
+				\item We provide custom cost functions and constraints to build
+				\item Minimum-X Trajectories
+				\item Minimum Time smooth and path consistent collision avoidance
+				      % \item For simple gradient based, is it possible to
+				      %       \begin{lstlisting}[language=python,
+				      % basicstyle=\fontsize{10pt}{0pt}\selectfont\fontfamily{zi4}\selectfont,
+				      % ]
+				      % import gsplines
+				      % alpha=0.1
+				      % q=gspliens.GSpline.Zero()
+				      % constFunction = MyConstFunction()
+				      % while not kktCondtitions(constFunction, q):
+				      % q+= alpha*constFunction.diff(q)
+				      % \end{lstlisting}
 
 			\end{itemize}
 		\end{column}
@@ -269,28 +270,39 @@ while not kktCondtitions(constFunction, q):
 
 waypoints = np.random.rand(4, 2)
 
-c1 = broken_lines_path(waypoints)
-c2 = minimum_acceleration_path(waypoints)
-c3 = minimum_jerk_path(waypoints)
-c4 = minimum_snap_path(waypoints)
-c5 = minimum_crackle_path(waypoints)
+straigh_lines = broken_lines_path(waypoints)
+min_acc = minimum_acceleration_path(waypoints)
+min_jerk = minimum_jerk_path(waypoints)
+min_snap = minimum_snap_path(waypoints)
+min_crackle = minimum_crackle_path(waypoints)
 
-plot2d_compare([c1, c2, c3, c4, c5], [
+plot2d_compare([straigh_lines, min_acc, min_jerk, min_snap, min_crackle], [
             'green', 'blue', 'magenta', 'red', 'black'],
             ['min vel', 'min acceleration', 'min jerk',
             'min snap', 'min crackle'])
 
+time_1 = 0.1
+time_2 = 0.3
+
+values_at_times = cq(np.array([time_1, time_2]))
+
+vel_norm = min_jerk.deriv(1).dot(min_jerk.deriv(1))
+plot(vel_norm)
     \end{lstlisting}
 		\end{column}
 		\begin{column}{0.6\textwidth}
-			\includegraphics[width=\textwidth]{./images/comparison.png}
+			\begin{tikzpicture}[scale=1, transform shape]
+				\node (pic) {\includegraphics[width=\textwidth]{./images/comparison.png}};
+				\node[anchor=north] (qd) at (pic.south) {\includegraphics[width=0.7\textwidth]{./images/qd_norm.png}};
+				\node[anchor=east] at (qd.west) {$\|\dot{q}\|$};
+			\end{tikzpicture}
 		\end{column}
 	\end{columns}
 
 \end{frame}
 
 \begin{frame}[fragile]
-	\frametitle{Optimization: Parametriuation Generation.}
+	\frametitle{Optimization: Parametrization Generation.}
 	\framesubtitle{Minimum time stop for collision avoidance}
 	\begin{columns}
 		\begin{column}{0.4\textwidth}
@@ -311,12 +323,13 @@ dim = 7   # number of joints of the robot
 number_of_waypoints = 5
 waypoints = np.random.rand(number_of_waypoints, dim)
 # The a minimum jerk trajectory with execution time of 5s
-trj = minimum_jerk_path(waypoints).linear_scaling_new_execution_time(5.0)
+trj = minimum_jerk_path(waypoints)
 # Select the time to stop as the 60% of the time.
 stop_ti = trj.get_domain()[1]*0.6
 # Get a parametrization that minimizes the time and  does not
 # allow an increment in the acceleration larger than 50%
-optimal_parametrization = opstop.minimum_time_bounded_acceleration(
+optimal_parametrization = \
+    opstop.minimum_time_bounded_acceleration(
     trj, stop_ti, 1.5, str(model_file), 8)
 # Obtain the stopping trajectory
 stop_trj = trj.compose(optimal_parametrization)
@@ -328,7 +341,54 @@ gplot.plot_compare([stop_trj, trj], ['red', 'blue'], [
     \end{lstlisting}
 		\end{column}
 		\begin{column}{0.6\textwidth}
-			\includegraphics[width=3cm]{./images/temporal_opstopimage.png}
+			\includegraphics[width=\textwidth]{./images/opstop_param.pdf}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Optimization: Minimum Time Stop.}
+	\framesubtitle{Comparison with \Verb|ros\_control| default stop}
+
+	\vglue -1cm
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			\begin{tikzpicture}[scale=1, transform shape]
+				\node (joints){\includegraphics[height=3cm]{./images/opstop_path.pdf}};
+				\node[anchor=north east] (j2) at (joints.south east) {\includegraphics[height=2cm]{./images/opstop_joints.pdf}};
+				\node[anchor=east] at (j2.west) {\includegraphics[height=1.4cm]{./images/opstop_time.pdf}};
+			\end{tikzpicture}
+
+		\end{column}
+		\begin{column}{0.5\textwidth}
+
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{Optimization: Minimum Time parametrization.}
+	\framesubtitle{Fast and Smooth: Min. Time on a \Verb|GSpline|}
+	\begin{tikzpicture}[scale=1, transform shape]
+		\node (pic) {\includegraphics[width=6cm]{./images/mintimepaper.png}};
+		\node[anchor=north east]  at (pic.south) {\includegraphics[width=3cm]{./images/mintimeiteration.pdf}};
+		\node[anchor=north west] (vel) at (pic.south) {\includegraphics[width=3cm]{./images/mintimevelocity.pdf}};
+		\node[anchor=west,xshift=10mm]  at (vel.east) {\includegraphics[width=6cm]{./images/mintimevideopreview.png}};
+
+	\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Optimization: Minimum Time Trajectory Planning.}
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+
+		\end{column}
+		\begin{column}{0.5\textwidth}
+
 		\end{column}
 	\end{columns}
 \end{frame}

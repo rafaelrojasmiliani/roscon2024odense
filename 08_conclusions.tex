@@ -3,5 +3,29 @@
 
 	\begin{itemize}
 		\item Implementation of trajectories on $SE(3)$ (Cartesian, Position + Orientation)
+		\item Monadic interface to build generic cost/constraints function for \emphImFusion{optimization on manifolds}.
+		      Almost ready in \tikz[baseline=-3px ]{\node[rectangle, fill=darkgrey, rounded corners]{\includegraphics[width=3cm]{./images/logo.png}}} motion planning API.
+		\item Minimum Time \Verb|GSpline| parametrization: already published but must be cleaned WIP.
+		\item Implementing Basis for
+		      \begin{eqnarray*}
+			      \min \int_{t_0}^{t_f} \alpha_1 \left\|\diff{\qv}{t}\right\|^2 + \alpha_2 \left\|\diffk{\qv}{t}{2}\right\|^2 +  \alpha_3 \left\|\diffk{\qv}{t}{3} \right\|^2 \d t
+		      \end{eqnarray*}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+	\frametitle{Conclusions}
+
+	\begin{itemize}
+		\item We have demystified Minimum-X trajectories: They may be inefficient
+		\item However we can design weight-cost functions to improve these trajectories
+		\item A \Verb|GSpline| may be used to build custom gradient base optimization methods
+		\item The \Verb|GSplines| library provides out of the box ROS-ready
+		      \begin{itemize}
+			      \item Trajectory generation
+			      \item Minimum time stop
+			      \item General expressions constructions
+			      \item Plot tool
+		      \end{itemize}
 	\end{itemize}
 \end{frame}

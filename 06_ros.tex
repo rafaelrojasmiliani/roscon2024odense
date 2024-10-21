@@ -22,11 +22,12 @@ default_planner_request_adapters/FixStartStatePathConstraints
 	\begin{center}
 		\begin{tikzpicture}
 			\tikzumlset{font=\fontsize{5}{4}\selectfont}
-			\umlbasiccomponent[x=0, y=-3]{ROSAPP}
-			\umlbasiccomponent[x=4]{ActionWrapper}
-			\umlbasiccomponent[x=7,y=-3]{ROSControl}
-			\umlVHassemblyconnector[interface=FollowJointGSplineAction ,first arm, anchor2=-160] {ROSAPP}{ActionWrapper}
-			\umlVHassemblyconnector[interface=FollowJointTrajectoryAction ,first arm, anchor2=0] {ROSControl}{ActionWrapper}
+			\umlbasiccomponent[x=0, y=0]{MoveGroup}
+			\umlbasiccomponent[x=5]{ActionWrapper}
+			\umlbasiccomponent[x=10,y=0]{ROSControl}
+			\umlVHassemblyconnector[interface=FollowJointGSplineAction, anchor1=0] {MoveGroup}{ActionWrapper}
+			\umlVHassemblyconnector[interface=FollowJointTrajectoryAction, anchor2=0, anchor1=180] {ROSControl}{ActionWrapper}
+			\node at (MoveGroup.south) {foooooo};
 		\end{tikzpicture}
 	\end{center}
 \end{frame}
@@ -37,14 +38,14 @@ default_planner_request_adapters/FixStartStatePathConstraints
 		\begin{tikzpicture}
 			\begin{umlseqdiag}
 				\tikzumlset{font=\fontsize{5}{4}\selectfont}
-				\umlobject{ROSAPP}
+				\umlobject{MoveGroup}
 				\umlobject{ActionWrapper}
 				\umlobject{ROSControl}
-				\begin{umlcall}[op=FollowJointGSplineGoal,return=FollowJointGSplineFeedBack]{ROSAPP}{ActionWrapper}
+				\begin{umlcall}[op=FollowJointGSplineGoal,return=FollowJointGSplineFeedBack]{MoveGroup}{ActionWrapper}
 					\begin{umlcall}[op=FollowJointGSplineGoal,return=FollowJointTrajectoryFeedBack]{ActionWrapper}{ROSControl}
 					\end{umlcall}
 				\end{umlcall}
-				\begin{umlcall}[op=FollowJointGSplineCancel]{ROSAPP}{ActionWrapper}
+				\begin{umlcall}[op=FollowJointGSplineCancel]{MoveGroup}{ActionWrapper}
 					\begin{umlcallself}[op=optimization]{ActionWrapper}{ActionWrapper}
 					\end{umlcallself}
 					\begin{umlcall}[op=FollowJointGSplineGoal,return=FollowJointTrajectoryFeedBack]{ActionWrapper}{ROSControl}
@@ -53,10 +54,4 @@ default_planner_request_adapters/FixStartStatePathConstraints
 			\end{umlseqdiag}
 		\end{tikzpicture}
 	\end{center}
-\end{frame}
-
-
-\begin{frame}[t]
-	\frametitle{Integration with Moveit}
-
 \end{frame}

@@ -11,6 +11,7 @@
 			\emphImFusion{Remark:}
 			Minimum-X trajectories
 			present large overshoots.
+			As the arc-lenght is larger, this trajectores are slower
 		};
 	\end{tikzpicture}
 
@@ -41,6 +42,7 @@
 		\node[anchor=north] at (title.south) {
 			\parbox{5.5cm}{%
 				\fontsize{9}{2}
+				{\small Path shape parameter:}
 				\begin{eqnarray*}
 					k =  T\frac{\sqrt{2}}{4N}\sqrt[4]{\frac{\alpha}{1-\alpha}}.
 				\end{eqnarray*}
@@ -55,16 +57,21 @@
 	\begin{tikzpicture}[scale=1]
 		\node[anchor=north west](pic){%
 			\includegraphics[width=10cm]{./images/kdl_speed_comparison.pdf}};
-
-		\node[anchor=west,text width=5cm] (title) at (pic.east){This trajectories can be faster than trapezoidal velocity/acceleration proffiles};
-		\node[anchor=south] (eq) at (title.north){%
+		\node[anchor=north west] (eq) at (pic.north east){%
 			\parbox{5.5cm}{%
 				\fontsize{9}{2}
 				\begin{eqnarray*}
 					\min \int_{t_0}^{t_f} \alpha \left\|\diffk{\qv}{t}{}\right\|^2  + (\alpha - 1 )\left\|\diffk{\qv}{t}{3}\right\|^2 \d t
 				\end{eqnarray*}
-			}
-		};
+			}};
+
+		\node[anchor=west, node font=\fontsize{10}{10}\selectfont] (title) at (pic.east){\parbox{4cm}{
+				\begin{itemize}
+					\setlength{\itemsep}{1cm}
+					\item 14\% Faster
+					\item No blend radius
+				\end{itemize}
+			}};
 	\end{tikzpicture}
 \end{frame}
 
