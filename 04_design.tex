@@ -181,15 +181,12 @@ public:
 
 \begin{frame}[fragile]
 	\frametitle{Design: General operations}
-	We also desire to work with \emphImFusion{\bf trajectories that are not gsplines}
+	To work with \emphImFusion{\bf trajectories that are not gsplines}
+	we provide interface to construct \emphImFusion{general differentiable expressions}. For example:
 	\begin{itemize}
+		\item Scalar \Verb|GSplines| multiplied by a vector \Verb|GSpline| $q\cdot \pvv$
 		\item The norm of a derivative ${\left\| \ddot \qv \right\|}^2$
-		\item Non linear parametrization $ \qv \circ s $, where $\qv, s\in \text{\Verb|GSpline|}$
-	\end{itemize}
-	For this reason we also provide interface to construct \emphImFusion{general differentiable expressions}
-	\begin{itemize}
-		\item Scalar \Verb|GSplines| times a vector \Verb|GSpline|
-		\item Composition of \Verb|GSplines|
+		\item Composition of \Verb|GSplines| $\qv \circ s$
 	\end{itemize}
 	\begin{center}
 		\begin{tikzpicture}[scale=0.9]
@@ -264,7 +261,9 @@ public:
 
 \begin{frame}[fragile]
 	\frametitle{Optimization: Trajectory Generation}
+
 	\begin{columns}
+
 		\begin{column}{0.4\textwidth}
 			\begin{lstlisting}[language=python]
 
@@ -306,6 +305,7 @@ plot(vel_norm)
 	\framesubtitle{Minimum time stop for collision avoidance}
 	\begin{columns}
 		\begin{column}{0.4\textwidth}
+			{\fontsize{5}{4}\selectfont\Verb|https://github.com/rafaelrojasmiliani/opstop_cpp|}
 			\begin{lstlisting}[language=python,
             ]
 import gsplines

@@ -1,10 +1,10 @@
 \begin{frame}[fragile]
 	\frametitle{Integration with ROS}
 	\begin{itemize}
-		\item Custom messages for \Verb|GSpline| objects: Trajectories, Basis.
-		\item Conversions from \Verb|GSpline| into \Verb|trajectory_msgs::JointTrajectory| and \Verb|control_msgs::FollowJointTrajectoryGoal|
-		\item Custom plot tool with \Verb|rqt| plugin based on the amasing \Verb|rqt_joint_trajectory_plot|
-		\item Moveit Planner adapter \Verb|gsplines_moveit/MinimumSobolevSeminormAdapter|, can be used inside \Verb|ompl| pipeline
+		\item Custom \emphImFusion{\bf messages} for \Verb|GSpline| objects: Trajectories, Basis.
+		\item \emphImFusion{\bf Conversions} from \Verb|GSpline| into \Verb|trajectory_msgs::JointTrajectory| and \Verb|control_msgs::FollowJointTrajectoryGoal|
+		\item Custom \emphImFusion{rqt plot tool} with \Verb|rqt| plugin based on the amazing \Verb|rqt_joint_trajectory_plot|
+		\item Moveit \emphImFusion{Planner adapter} \Verb|gsplines_moveit/MinimumSobolevSeminormAdapter|, can be used inside \Verb|ompl| pipeline
 		      \begin{lstlisting}
 gsplines_moveit/MinimumSobolevSeminormAdapter
 default_planner_request_adapters/FixWorkspaceBounds
@@ -17,8 +17,10 @@ default_planner_request_adapters/FixStartStatePathConstraints
 \end{frame}
 
 
-\begin{frame}[t]
-	\frametitle{OpStop Integration}
+\begin{frame}[fragile]
+	\frametitle{Moveit Integration}
+	\framesubtitle{Architecture}
+
 	\begin{center}
 		\begin{tikzpicture}
 			\tikzumlset{font=\fontsize{5}{4}\selectfont}
@@ -27,13 +29,17 @@ default_planner_request_adapters/FixStartStatePathConstraints
 			\umlbasiccomponent[x=10,y=0]{ROSControl}
 			\umlVHassemblyconnector[interface=FollowJointGSplineAction, anchor1=0] {MoveGroup}{ActionWrapper}
 			\umlVHassemblyconnector[interface=FollowJointTrajectoryAction, anchor2=0, anchor1=180] {ROSControl}{ActionWrapper}
-			\node at (MoveGroup.south) {foooooo};
+			\node[anchor=north] (rviz) at (MoveGroup.south) {\includegraphics[width=5cm]{./images/moveitRviz.png}};
+			\node[anchor=west] at (rviz.east) {\includegraphics[width=5cm]{./images/moveitPlot.png}};
+			\node[anchor=north] at (rviz.south) {\includegraphics[width=5cm]{./images/moveitRqt.png}};
 		\end{tikzpicture}
 	\end{center}
+	\vglue 5cm
 \end{frame}
 
-\begin{frame}[t]
+\begin{frame}[fragile]
 	\frametitle{OpStop Integration}
+	\framesubtitle{Opstop}
 	\begin{center}
 		\begin{tikzpicture}
 			\begin{umlseqdiag}
